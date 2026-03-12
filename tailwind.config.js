@@ -7,10 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        deepVoid: '#0A0A14',
-        plasma: '#7B61FF',
-        ghost: '#F0EFF4',
-        graphite: '#18181B'
+        deepVoid: '#121212', // deepCharcoal
+        plasma: '#D4AF37',   // mutedGold
+        ghost: '#FAFAFA',    // cream
+        graphite: '#1A1A1A'  // slightly lighter charcoal
       },
       fontFamily: {
         sans: ['Sora', 'sans-serif'],
