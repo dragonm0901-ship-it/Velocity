@@ -4,16 +4,16 @@
 
 @layer base {
   body {
-    @apply bg-ghost text-graphite overflow-x-hidden;
+    @apply bg-ghost text-graphite overflow-x-hidden cursor-none;
+  }
+
+  a, button, input, textarea {
+    @apply cursor-none;
   }
 }
 
 .magnetic-btn {
-  @apply relative overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)];
-}
-
-.magnetic-btn:hover {
-  transform: scale(1.03);
+  @apply relative overflow-hidden;
 }
 
 .magnetic-btn::before {

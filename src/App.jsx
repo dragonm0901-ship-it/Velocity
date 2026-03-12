@@ -1,9 +1,169 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const Preloader = ({ onComplete }) => {
+  const containerRef = useRef(null);
+  const textRef = useRef(null);
+  const bgRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        onComplete: onComplete
+      });
+
+      tl.to(textRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 1.5,
+        ease: "power3.out"
+      })
+      .to(textRef.current, {
+        opacity: 0,
+        y: -20,
+        duration: 1,
+        delay: 0.5,
+        ease: "power3.in"
+      })
+      .to(bgRef.current, {
+        height: 0,
+        duration: 1.2,
+        ease: "power4.inOut"
+      }, "-=0.2");
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [onComplete]);
+
+  return (
+    <div ref={containerRef} className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none">
+      <div ref={bgRef} className="absolute inset-0 bg-deepVoid w-full h-full transform origin-top"></div>
+      <div
+        ref={textRef}
+        className="relative z-10 font-drama text-ghost text-6xl md:text-8xl italic opacity-0 translate-y-10"
+      >
+        Aura
+      </div>
+    </div>
+  );
+};
+
+const CustomCursor = () => {
+  const cursorRef = useRef(null);
+
+  useEffect(() => {
+    const cursor = cursorRef.current;
+
+    gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+
+    const moveCursor = (e) => {
+      gsap.to(cursor, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.15,
+        ease: "power2.out"
+      });
+    };
+
+    const handleHover = () => {
+      gsap.to(cursor, {
+        scale: 2.5,
+        backgroundColor: "transparent",
+        border: "1px solid #D4AF37",
+        duration: 0.3,
+      });
+    };
+
+    const handleHoverOut = () => {
+      gsap.to(cursor, {
+        scale: 1,
+        backgroundColor: "#D4AF37",
+        border: "1px solid transparent",
+        duration: 0.3,
+      });
+    };
+
+    window.addEventListener('mousemove', moveCursor);
+
+    // MutationObserver to catch elements loaded after initial render
+    const observer = new MutationObserver(() => {
+        const interactiveElements = document.querySelectorAll('a, button, .magnetic-btn, .hover-target');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', handleHover);
+            el.addEventListener('mouseleave', handleHoverOut);
+        });
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Initial attach
+    const initialElements = document.querySelectorAll('a, button, .magnetic-btn, .hover-target');
+    initialElements.forEach(el => {
+        el.addEventListener('mouseenter', handleHover);
+        el.addEventListener('mouseleave', handleHoverOut);
+    });
+
+    return () => {
+      window.removeEventListener('mousemove', moveCursor);
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <div
+      ref={cursorRef}
+      className="fixed top-0 left-0 w-3 h-3 bg-plasma rounded-full pointer-events-none z-[9999] mix-blend-difference shadow-[0_0_10px_rgba(212,175,55,0.5)]"
+    ></div>
+  );
+};
+
+const GlobalInteractions = () => {
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (e.target.closest('.magnetic-btn')) {
+        const btn = e.target.closest('.magnetic-btn');
+        const rect = btn.getBoundingClientRect();
+        const x = (e.clientX - rect.left) - rect.width / 2;
+        const y = (e.clientY - rect.top) - rect.height / 2;
+
+        gsap.to(btn, {
+          x: x * 0.4,
+          y: y * 0.4,
+          duration: 0.8,
+          ease: "power3.out"
+        });
+      }
+    };
+
+    const handleMouseLeave = (e) => {
+      // Because we use mouseout globally, we have to check if the mouse actually left the button
+      const btn = e.target.closest('.magnetic-btn');
+      if (btn && (!e.relatedTarget || !btn.contains(e.relatedTarget))) {
+        gsap.to(btn, {
+          x: 0,
+          y: 0,
+          duration: 0.8,
+          ease: "elastic.out(1, 0.3)"
+        });
+      }
+    };
+
+    document.body.addEventListener('mousemove', handleMouseMove);
+    document.body.addEventListener('mouseout', handleMouseLeave);
+
+    return () => {
+      document.body.removeEventListener('mousemove', handleMouseMove);
+      document.body.removeEventListener('mouseout', handleMouseLeave);
+      gsap.set('.magnetic-btn', { clearProps: 'transform' });
+    };
+  }, []);
+
+  return null;
+};
 
 // Components
 const Navbar = () => {
@@ -47,10 +207,12 @@ const Navbar = () => {
   );
 };
 
-const Hero = () => {
+const Hero = ({ isReady }) => {
   const heroRef = useRef(null);
 
   useEffect(() => {
+    if (!isReady) return;
+
     let ctx = gsap.context(() => {
       gsap.fromTo(
         '.hero-el',
@@ -59,7 +221,7 @@ const Hero = () => {
       );
     }, heroRef);
     return () => ctx.revert();
-  }, []);
+  }, [isReady]);
 
   return (
     <section ref={heroRef} className="relative h-[100dvh] w-full flex items-end pb-24 px-8 md:px-16 overflow-hidden">
@@ -98,8 +260,31 @@ const Hero = () => {
 };
 
 const Features = () => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      // Parallax effect for images inside feature cards
+      const images = gsap.utils.toArray('.feature-img-container img');
+      images.forEach(img => {
+        gsap.to(img, {
+          yPercent: 20,
+          scale: 1.1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: img.parentElement,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true
+          }
+        });
+      });
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="features" className="py-32 px-8 md:px-16 w-full flex justify-center bg-ghost relative z-10">
+    <section id="features" ref={containerRef} className="py-32 px-8 md:px-16 w-full flex justify-center bg-ghost relative z-10">
       <div className="w-full max-w-6xl">
         <div className="mb-24 flex flex-col items-center text-center">
           <h2 className="font-drama text-4xl md:text-6xl text-graphite mb-6 tracking-wide italic">The Aura Standard</h2>
@@ -110,8 +295,8 @@ const Features = () => {
           
           {/* Card 1 */}
           <div className="bg-ghost rounded-[1rem] p-10 border border-graphite/5 flex flex-col hover-lift group">
-            <div className="h-48 mb-8 overflow-hidden rounded-lg">
-               <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1000&auto=format&fit=crop" className="w-full h-full object-cover grayscale opacity-80 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-700" alt="Timeless Design" />
+            <div className="feature-img-container h-48 mb-8 overflow-hidden rounded-lg relative">
+               <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1000&auto=format&fit=crop" className="absolute top-[-20%] left-0 w-full h-[140%] object-cover grayscale opacity-80 group-hover:grayscale-0 transition-all duration-700" alt="Timeless Design" />
             </div>
             <span className="font-sans text-plasma text-xs tracking-widest uppercase mb-4">01 / Foundation</span>
             <h3 className="font-drama text-3xl text-graphite mb-4 italic">Timeless Design</h3>
@@ -120,8 +305,8 @@ const Features = () => {
 
           {/* Card 2 */}
           <div className="bg-ghost rounded-[1rem] p-10 border border-graphite/5 flex flex-col hover-lift group mt-0 md:mt-12">
-            <div className="h-48 mb-8 overflow-hidden rounded-lg">
-               <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1000&auto=format&fit=crop" className="w-full h-full object-cover grayscale opacity-80 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-700" alt="Exquisite Craftsmanship" />
+            <div className="feature-img-container h-48 mb-8 overflow-hidden rounded-lg relative">
+               <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop" className="absolute top-[-20%] left-0 w-full h-[140%] object-cover grayscale opacity-80 group-hover:grayscale-0 transition-all duration-700" alt="Exquisite Craftsmanship" />
             </div>
             <span className="font-sans text-plasma text-xs tracking-widest uppercase mb-4">02 / Execution</span>
             <h3 className="font-drama text-3xl text-graphite mb-4 italic">Exquisite Craftsmanship</h3>
@@ -130,8 +315,8 @@ const Features = () => {
 
           {/* Card 3 */}
           <div className="bg-ghost rounded-[1rem] p-10 border border-graphite/5 flex flex-col hover-lift group mt-0 md:mt-24">
-            <div className="h-48 mb-8 overflow-hidden rounded-lg">
-               <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop" className="w-full h-full object-cover grayscale opacity-80 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-700" alt="Unparalleled Detail" />
+            <div className="feature-img-container h-48 mb-8 overflow-hidden rounded-lg relative">
+               <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1000&auto=format&fit=crop" className="absolute top-[-20%] left-0 w-full h-[140%] object-cover grayscale opacity-80 group-hover:grayscale-0 transition-all duration-700" alt="Unparalleled Detail" />
             </div>
             <span className="font-sans text-plasma text-xs tracking-widest uppercase mb-4">03 / Refinement</span>
             <h3 className="font-drama text-3xl text-graphite mb-4 italic">Unparalleled Detail</h3>
@@ -141,6 +326,20 @@ const Features = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+const SplitText = ({ children, className }) => {
+  return (
+    <span className={`inline-block overflow-hidden ${className}`}>
+      {children.split(' ').map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden">
+          <span className="split-word inline-block mr-2 md:mr-3 pb-1" style={{ transform: 'translateY(100%)' }}>
+            {word}
+          </span>
+        </span>
+      ))}
+    </span>
   );
 };
 
@@ -154,7 +353,6 @@ const Philosophy = () => {
         { 
           y: 0, 
           opacity: 1, 
-          stagger: 0.15, 
           duration: 1, 
           ease: "power3.out",
           scrollTrigger: {
@@ -163,6 +361,17 @@ const Philosophy = () => {
           }
         }
       );
+
+      gsap.to('.split-word', {
+        y: 0,
+        stagger: 0.05,
+        duration: 1.2,
+        ease: "power4.out",
+        scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 60%",
+        }
+      });
 
       gsap.to('.parallax-bg', {
         yPercent: 30,
@@ -194,9 +403,9 @@ const Philosophy = () => {
         <p className="manifesto-text font-sans font-light text-ghost/50 text-sm md:text-base mb-8 tracking-widest uppercase">
           The true essence of luxury lies within.
         </p>
-        <p className="manifesto-text font-drama text-5xl md:text-7xl lg:text-[6rem] text-ghost leading-[1.1] tracking-wide">
-          We focus on <span className="text-plasma italic pr-4">structural elegance</span> <br/>
-          and absolute perfection.
+        <p className="font-drama text-5xl md:text-7xl lg:text-[6rem] text-ghost leading-[1.1] tracking-wide">
+          <SplitText>We focus on</SplitText> <SplitText className="text-plasma italic pr-4">structural elegance</SplitText> <br/>
+          <SplitText>and absolute perfection.</SplitText>
         </p>
       </div>
     </section>
@@ -337,25 +546,35 @@ const Footer = () => {
 
 function App() {
   const lineRef = useRef(null);
+  const [preloaderDone, setPreloaderDone] = useState(false);
 
   useEffect(() => {
     const lenis = new Lenis();
 
+    if (!preloaderDone) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+
     lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
+    const raf = (time) => {
       lenis.raf(time * 1000);
-    });
+    };
 
+    gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
     return () => {
       lenis.destroy();
-      gsap.ticker.remove(lenis.raf);
+      gsap.ticker.remove(raf);
     };
-  }, []);
+  }, [preloaderDone]);
 
   useEffect(() => {
+    if (!preloaderDone) return;
+
     let ctx = gsap.context(() => {
       const path = lineRef.current;
       if(path) {
@@ -375,11 +594,18 @@ function App() {
       }
     });
     return () => ctx.revert();
-  }, []);
+  }, [preloaderDone]);
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-[5] opacity-30 mix-blend-difference">
+      <GlobalInteractions />
+      {!preloaderDone && <Preloader onComplete={() => setPreloaderDone(true)} />}
+      <CustomCursor />
+
+      <div
+        className="fixed top-0 left-0 w-full h-full pointer-events-none z-[5] opacity-30 mix-blend-difference"
+        style={{ opacity: preloaderDone ? 0.3 : 0, transition: 'opacity 1s ease-in-out' }}
+      >
          <svg viewBox="0 0 100 1000" preserveAspectRatio="none" className="w-full h-[300vh] absolute top-0 left-0">
            <path
              ref={lineRef}
@@ -391,15 +617,17 @@ function App() {
            />
          </svg>
       </div>
-      <Navbar />
-      <main>
-        <Hero />
-        <Features />
-        <Philosophy />
-        <Atelier />
-        <CTA />
-      </main>
-      <Footer />
+      <div style={{ opacity: preloaderDone ? 1 : 0, transition: 'opacity 0.8s ease-in-out' }}>
+        <Navbar />
+        <main>
+          <Hero isReady={preloaderDone} />
+          <Features />
+          <Philosophy />
+          <Atelier />
+          <CTA />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }
