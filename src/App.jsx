@@ -121,6 +121,50 @@ const CustomCursor = () => {
   );
 };
 
+const GlobalInteractions = () => {
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (e.target.closest('.magnetic-btn')) {
+        const btn = e.target.closest('.magnetic-btn');
+        const rect = btn.getBoundingClientRect();
+        const x = (e.clientX - rect.left) - rect.width / 2;
+        const y = (e.clientY - rect.top) - rect.height / 2;
+
+        gsap.to(btn, {
+          x: x * 0.4,
+          y: y * 0.4,
+          duration: 0.8,
+          ease: "power3.out"
+        });
+      }
+    };
+
+    const handleMouseLeave = (e) => {
+      // Because we use mouseout globally, we have to check if the mouse actually left the button
+      const btn = e.target.closest('.magnetic-btn');
+      if (btn && (!e.relatedTarget || !btn.contains(e.relatedTarget))) {
+        gsap.to(btn, {
+          x: 0,
+          y: 0,
+          duration: 0.8,
+          ease: "elastic.out(1, 0.3)"
+        });
+      }
+    };
+
+    document.body.addEventListener('mousemove', handleMouseMove);
+    document.body.addEventListener('mouseout', handleMouseLeave);
+
+    return () => {
+      document.body.removeEventListener('mousemove', handleMouseMove);
+      document.body.removeEventListener('mouseout', handleMouseLeave);
+      gsap.set('.magnetic-btn', { clearProps: 'transform' });
+    };
+  }, []);
+
+  return null;
+};
+
 // Components
 const Navbar = () => {
   const navRef = useRef(null);
@@ -141,32 +185,6 @@ const Navbar = () => {
             gsap.to(navRef.current.querySelectorAll('.nav-link, .brand-text'), { color: '#F0EFF4', duration: 0.3 });
           }
         }
-      });
-
-      // Magnetic Effect for Buttons globally
-      const magneticBtns = document.querySelectorAll('.magnetic-btn');
-      magneticBtns.forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-          const rect = btn.getBoundingClientRect();
-          const x = (e.clientX - rect.left) - rect.width / 2;
-          const y = (e.clientY - rect.top) - rect.height / 2;
-
-          gsap.to(btn, {
-            x: x * 0.4,
-            y: y * 0.4,
-            duration: 0.8,
-            ease: "power3.out"
-          });
-        });
-
-        btn.addEventListener('mouseleave', () => {
-          gsap.to(btn, {
-            x: 0,
-            y: 0,
-            duration: 0.8,
-            ease: "elastic.out(1, 0.3)"
-          });
-        });
       });
     });
     return () => ctx.revert();
@@ -189,10 +207,12 @@ const Navbar = () => {
   );
 };
 
-const Hero = () => {
+const Hero = ({ isReady }) => {
   const heroRef = useRef(null);
 
   useEffect(() => {
+    if (!isReady) return;
+
     let ctx = gsap.context(() => {
       gsap.fromTo(
         '.hero-el',
@@ -201,7 +221,7 @@ const Hero = () => {
       );
     }, heroRef);
     return () => ctx.revert();
-  }, []);
+  }, [isReady]);
 
   return (
     <section ref={heroRef} className="relative h-[100dvh] w-full flex items-end pb-24 px-8 md:px-16 overflow-hidden">
@@ -531,19 +551,26 @@ function App() {
   useEffect(() => {
     const lenis = new Lenis();
 
+    if (!preloaderDone) {
+      lenis.stop();
+    } else {
+      lenis.start();
+    }
+
     lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
+    const raf = (time) => {
       lenis.raf(time * 1000);
-    });
+    };
 
+    gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
     return () => {
       lenis.destroy();
-      gsap.ticker.remove(lenis.raf);
+      gsap.ticker.remove(raf);
     };
-  }, []);
+  }, [preloaderDone]);
 
   useEffect(() => {
     if (!preloaderDone) return;
@@ -571,6 +598,7 @@ function App() {
 
   return (
     <>
+      <GlobalInteractions />
       {!preloaderDone && <Preloader onComplete={() => setPreloaderDone(true)} />}
       <CustomCursor />
 
@@ -592,7 +620,7 @@ function App() {
       <div style={{ opacity: preloaderDone ? 1 : 0, transition: 'opacity 0.8s ease-in-out' }}>
         <Navbar />
         <main>
-          <Hero />
+          <Hero isReady={preloaderDone} />
           <Features />
           <Philosophy />
           <Atelier />
