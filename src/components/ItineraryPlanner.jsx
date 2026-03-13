@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
-import { CalendarDays, Mountain, Gauge, ArrowRight, ArrowLeft, CheckCircle, MapPin } from 'lucide-react';
+import { CalendarDays, Mountain, Gauge, ArrowRight, ArrowLeft, CheckCircle, Footprints, TrendingUp, Clock, Timer, CalendarRange } from 'lucide-react';
 
 const steps = ['difficulty', 'duration', 'interests'];
 
@@ -113,13 +113,16 @@ const ItineraryPlanner = () => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <OptionButton selected={answers.difficulty === 'easy'} onClick={() => selectOption('difficulty', 'easy')}>
-                  🥾 Easy<br/><span className="font-normal text-xs opacity-60">Scenic walks, 3-5 hrs/day</span>
+                  <div className="flex items-center gap-2 mb-1"><Footprints size={18} className="text-peakGreen" /> Easy</div>
+                  <span className="font-normal text-xs opacity-60">Scenic walks, 3-5 hrs/day</span>
                 </OptionButton>
                 <OptionButton selected={answers.difficulty === 'moderate'} onClick={() => selectOption('difficulty', 'moderate')}>
-                  ⛰️ Moderate<br/><span className="font-normal text-xs opacity-60">Challenging trails, 5-7 hrs/day</span>
+                  <div className="flex items-center gap-2 mb-1"><TrendingUp size={18} className="text-peakGreen" /> Moderate</div>
+                  <span className="font-normal text-xs opacity-60">Challenging trails, 5-7 hrs/day</span>
                 </OptionButton>
                 <OptionButton selected={answers.difficulty === 'hard'} onClick={() => selectOption('difficulty', 'hard')}>
-                  🏔️ Hard<br/><span className="font-normal text-xs opacity-60">High altitude, 7+ hrs/day</span>
+                  <div className="flex items-center gap-2 mb-1"><Mountain size={18} className="text-peakGreen" /> Hard</div>
+                  <span className="font-normal text-xs opacity-60">High altitude, 7+ hrs/day</span>
                 </OptionButton>
               </div>
             </div>
@@ -134,13 +137,16 @@ const ItineraryPlanner = () => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <OptionButton selected={answers.duration === 'short'} onClick={() => selectOption('duration', 'short')}>
-                  ⚡ Under 7 days<br/><span className="font-normal text-xs opacity-60">Quick adventures</span>
+                  <div className="flex items-center gap-2 mb-1"><Timer size={18} className="text-peakGreen" /> Under 7 days</div>
+                  <span className="font-normal text-xs opacity-60">Quick adventures</span>
                 </OptionButton>
                 <OptionButton selected={answers.duration === 'medium'} onClick={() => selectOption('duration', 'medium')}>
-                  📅 7–14 days<br/><span className="font-normal text-xs opacity-60">Classic treks</span>
+                  <div className="flex items-center gap-2 mb-1"><Clock size={18} className="text-peakGreen" /> 7–14 days</div>
+                  <span className="font-normal text-xs opacity-60">Classic treks</span>
                 </OptionButton>
                 <OptionButton selected={answers.duration === 'long'} onClick={() => selectOption('duration', 'long')}>
-                  🗓️ 14+ days<br/><span className="font-normal text-xs opacity-60">Epic expeditions</span>
+                  <div className="flex items-center gap-2 mb-1"><CalendarRange size={18} className="text-peakGreen" /> 14+ days</div>
+                  <span className="font-normal text-xs opacity-60">Epic expeditions</span>
                 </OptionButton>
               </div>
             </div>
