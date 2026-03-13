@@ -34,31 +34,100 @@ const WhatsAppFloat = () => {
   );
 };
 
-const AltitudeProgress = () => {
+import OfflineDashboard from './components/OfflineDashboard';
+
+const useOnlineStatus = () => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
   useEffect(() => {
-    gsap.to('.trail-hiker', {
-      y: '100%',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: document.body,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1,
-      }
-    });
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
+  return isOnline;
+};
+
+const InteractiveTimeline = () => {
+  const [activeSection, setActiveSection] = useState('hero');
+  const sections = [
+    { id: 'hero', label: 'Top' },
+    { id: 'destinations', label: 'Treks' },
+    { id: 'itinerary-planner', label: 'Planner' },
+    { id: 'features', label: 'Features' },
+    { id: 'weather-widget', label: 'Weather' },
+    { id: 'gear-checker', label: 'Gear' },
+    { id: 'testimonials', label: 'Reviews' }
+  ];
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -70% 0px',
+      threshold: 0
+    };
+
+    const handleIntersect = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+    sections.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="fixed right-4 top-1/4 bottom-1/4 w-0.5 bg-black/10 dark:bg-white/10 rounded-full z-[80] hidden md:block">
-      <div className="trail-hiker absolute top-0 -left-1.5 w-4 h-4 bg-peakGreen rounded-full shadow-[0_0_8px_rgba(22,101,52,0.5)] flex items-center justify-center">
-        <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-      </div>
+    <div className="fixed right-4 top-1/2 -translate-y-1/2 w-8 z-[80] hidden md:flex flex-col items-center gap-4 py-4">
+      {sections.map(({ id, label }, index) => {
+        const isActive = activeSection === id;
+        return (
+          <div key={id} className="relative group w-full flex justify-center">
+            {/* Tooltip */}
+            <div className={`absolute right-6 top-1/2 -translate-y-1/2 bg-peakDark text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none ${isActive ? 'bg-peakGreen' : ''}`}>
+              {label}
+            </div>
+            
+            {/* Dot & Line (Line connects to the previous dot if not the first) */}
+            {index > 0 && <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-px h-4 bg-peakDeep/10 dark:bg-white/10" />}
+            
+            <button
+              onClick={() => scrollToSection(id)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 relative z-10 ${isActive ? 'bg-peakGreen scale-150 shadow-[0_0_8px_rgba(22,101,52,0.8)]' : 'bg-peakDeep/20 dark:bg-white/20 hover:bg-peakDeep/40 dark:hover:bg-white/40'}`}
+              aria-label={`Scroll to ${label}`}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };
 
 function App() {
   const [compassOpen, setCompassOpen] = useState(false);
+  const isOnline = useOnlineStatus();
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -78,12 +147,17 @@ function App() {
     };
   }, []);
 
+  // Return OfflineDashboard early if the user is completely offline.
+  if (!isOnline) {
+    return <OfflineDashboard />;
+  }
+
   return (
     <>
       <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-peakGreen focus:text-white focus:px-4 focus:py-2 focus:rounded">
         Skip to content
       </a>
-      <AltitudeProgress />
+      <InteractiveTimeline />
       <WhatsAppFloat />
       <Navbar onCompassOpen={() => setCompassOpen(true)} />
       <Compass isOpen={compassOpen} onClose={() => setCompassOpen(false)} />

@@ -81,11 +81,12 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 animate-bounce">
-        <span className="text-white/50 text-xs font-sans uppercase tracking-widest">{t('hero.scroll')}</span>
-        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-1.5">
-          <div className="w-1.5 h-3 bg-white/60 rounded-full"></div>
+      {/* Scroll indicator - hidden on mobile, nature-inspired on desktop */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-4">
+        <span className="text-white/60 text-[10px] font-sans uppercase tracking-[0.2em]">{t('hero.scroll')}</span>
+        <div className="w-px h-16 bg-white/20 relative overflow-hidden">
+          {/* Animated flowing line representing a trail or waterfall */}
+          <div className="w-full h-1/2 bg-white/80 absolute top-0 -translate-y-full animate-[scrolldown_2s_ease-in-out_infinite]"></div>
         </div>
       </div>
     </section>

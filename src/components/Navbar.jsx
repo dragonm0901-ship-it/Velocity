@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useSettings } from '../context/SettingsContext';
-import { Sun, CloudMoon, Menu, X, Navigation } from 'lucide-react';
+import { Sun, Cloud, Menu, X, Navigation } from 'lucide-react';
 import gsap from 'gsap';
 
 const Navbar = ({ onCompassOpen }) => {
@@ -81,7 +81,7 @@ const Navbar = ({ onCompassOpen }) => {
             aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
           >
             <div ref={iconRef}>
-              {theme === 'light' ? <Sun size={18} /> : <CloudMoon size={18} />}
+              {theme === 'light' ? <Sun size={18} /> : <Cloud size={18} />}
             </div>
           </button>
 

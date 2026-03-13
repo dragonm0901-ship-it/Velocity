@@ -5,136 +5,7 @@ import jsPDF from 'jspdf';
 
 const steps = ['difficulty', 'duration', 'interests', 'accommodation', 'extras'];
 
-const treks = [
-  {
-    name: 'Everest Base Camp', difficulty: 'hard', days: 14, interests: ['mountains', 'culture'], altitude: '5,364m', price: 1400, crowd: 'red',
-    itinerary: [
-      { day: 1, place: 'Kathmandu', desc: 'Arrive and hotel check-in. Team briefing and gear check.', alt: '1,400m' },
-      { day: 2, place: 'Kathmandu → Lukla → Phakding', desc: 'Scenic flight to Lukla. Trek to Phakding.', alt: '2,610m' },
-      { day: 3, place: 'Phakding → Namche Bazaar', desc: 'Cross suspension bridges, climb to Namche.', alt: '3,440m' },
-      { day: 4, place: 'Namche Bazaar', desc: 'Acclimatization day. Visit Sherpa museum and Everest View Hotel.', alt: '3,440m' },
-      { day: 5, place: 'Namche → Tengboche', desc: 'Trek through rhododendron forests to Tengboche monastery.', alt: '3,860m' },
-      { day: 6, place: 'Tengboche → Dingboche', desc: 'Descend to river, then climb to Dingboche.', alt: '4,410m' },
-      { day: 7, place: 'Dingboche', desc: 'Acclimatization. Hike to Nangkartshang Peak.', alt: '4,410m' },
-      { day: 8, place: 'Dingboche → Lobuche', desc: 'Pass Dughla and memorial cairns. Trek to Lobuche.', alt: '4,940m' },
-      { day: 9, place: 'Lobuche → Gorak Shep → EBC', desc: 'Trek to Gorak Shep, then to Everest Base Camp!', alt: '5,364m' },
-      { day: 10, place: 'Gorak Shep → Kala Patthar', desc: 'Pre-dawn hike for sunrise with panoramic Everest views.', alt: '5,545m' },
-      { day: 11, place: 'Gorak Shep → Pheriche', desc: 'Descend through the valley to Pheriche.', alt: '4,240m' },
-      { day: 12, place: 'Pheriche → Namche', desc: 'Long descent back to Namche Bazaar.', alt: '3,440m' },
-      { day: 13, place: 'Namche → Lukla', desc: 'Final trek back to Lukla. Celebration dinner.', alt: '2,860m' },
-      { day: 14, place: 'Lukla → Kathmandu', desc: 'Morning flight back to Kathmandu. Trip complete!', alt: '1,400m' },
-    ]
-  },
-  {
-    name: 'Annapurna Circuit', difficulty: 'hard', days: 18, interests: ['mountains', 'diversity'], altitude: '5,416m', price: 1200, crowd: 'yellow',
-    itinerary: [
-      { day: 1, place: 'Kathmandu → Besisahar', desc: 'Drive to Besisahar trailhead.', alt: '760m' },
-      { day: 2, place: 'Besisahar → Bahundanda', desc: 'Trek through rice terraces and villages.', alt: '1,310m' },
-      { day: 3, place: 'Bahundanda → Chamje', desc: 'Follow the Marsyangdi River valley.', alt: '1,410m' },
-      { day: 4, place: 'Chamje → Dharapani', desc: 'Cross gorges and waterfalls.', alt: '1,860m' },
-      { day: 5, place: 'Dharapani → Chame', desc: 'Enter the Manang district.', alt: '2,670m' },
-      { day: 6, place: 'Chame → Upper Pisang', desc: 'First views of Annapurna II.', alt: '3,310m' },
-      { day: 7, place: 'Upper Pisang → Manang', desc: 'Dramatic mountain scenery.', alt: '3,540m' },
-      { day: 8, place: 'Manang', desc: 'Rest and acclimatize. Visit ice lakes.', alt: '3,540m' },
-      { day: 9, place: 'Manang → Yak Kharka', desc: 'High altitude terrain begins.', alt: '4,018m' },
-      { day: 10, place: 'Yak Kharka → Thorong Phedi', desc: 'Base camp for the pass crossing.', alt: '4,525m' },
-      { day: 11, place: 'Thorong La Pass → Muktinath', desc: 'Cross the 5,416m pass! Descend to Muktinath.', alt: '3,760m' },
-      { day: 12, place: 'Muktinath → Marpha', desc: 'Descend through apple orchards.', alt: '2,670m' },
-      { day: 13, place: 'Marpha → Ghasa', desc: 'Kali Gandaki gorge trek.', alt: '2,010m' },
-      { day: 14, place: 'Ghasa → Tatopani', desc: 'Hot springs village!', alt: '1,190m' },
-      { day: 15, place: 'Tatopani → Ghorepani', desc: 'Steep climb through forests.', alt: '2,874m' },
-      { day: 16, place: 'Ghorepani → Poon Hill → Tadapani', desc: 'Famous sunrise point.', alt: '2,630m' },
-      { day: 17, place: 'Tadapani → Nayapul → Pokhara', desc: 'Descend to Nayapul, drive to Pokhara.', alt: '827m' },
-      { day: 18, place: 'Pokhara → Kathmandu', desc: 'Drive or fly back to Kathmandu.', alt: '1,400m' },
-    ]
-  },
-  {
-    name: 'Mardi Himal', difficulty: 'moderate', days: 7, interests: ['mountains', 'offbeat'], altitude: '4,500m', price: 600, crowd: 'green',
-    itinerary: [
-      { day: 1, place: 'Pokhara → Kande → Pothana', desc: 'Drive to Kande, trek to Pothana village.', alt: '1,890m' },
-      { day: 2, place: 'Pothana → Forest Camp', desc: 'Trek through dense rhododendron forest.', alt: '2,550m' },
-      { day: 3, place: 'Forest Camp → Low Camp', desc: 'Enter the alpine ridge.', alt: '2,990m' },
-      { day: 4, place: 'Low Camp → High Camp', desc: 'Stunning views of Machhapuchhre open up.', alt: '3,580m' },
-      { day: 5, place: 'High Camp → Mardi Himal BC', desc: 'Summit day! Base camp at 4,500m.', alt: '4,500m' },
-      { day: 6, place: 'Mardi Himal BC → Siding', desc: 'Descend via alternative route through villages.', alt: '1,750m' },
-      { day: 7, place: 'Siding → Pokhara', desc: 'Short walk then drive to Pokhara.', alt: '827m' },
-    ]
-  },
-  {
-    name: 'Langtang Valley', difficulty: 'moderate', days: 10, interests: ['culture', 'mountains'], altitude: '3,870m', price: 700, crowd: 'green',
-    itinerary: [
-      { day: 1, place: 'Kathmandu → Syabrubesi', desc: 'Scenic drive along the Trishuli River.', alt: '1,550m' },
-      { day: 2, place: 'Syabrubesi → Lama Hotel', desc: 'Trek through oak and rhododendron forests.', alt: '2,380m' },
-      { day: 3, place: 'Lama Hotel → Langtang Village', desc: 'Follow the Langtang Khola upstream.', alt: '3,430m' },
-      { day: 4, place: 'Langtang → Kyanjin Gompa', desc: 'Arrive at the ancient monastery.', alt: '3,870m' },
-      { day: 5, place: 'Kyanjin Gompa', desc: 'Day hike to Tserko Ri or Kyanjin Ri for views.', alt: '3,870m' },
-      { day: 6, place: 'Kyanjin → Lama Hotel', desc: 'Begin the descent.', alt: '2,380m' },
-      { day: 7, place: 'Lama Hotel → Syabrubesi', desc: 'Complete the descent.', alt: '1,550m' },
-      { day: 8, place: 'Syabrubesi → Kathmandu', desc: 'Drive back to Kathmandu.', alt: '1,400m' },
-      { day: 9, place: 'Kathmandu', desc: 'Free day for shopping and sightseeing.', alt: '1,400m' },
-      { day: 10, place: 'Departure', desc: 'Transfer to airport.', alt: '1,400m' },
-    ]
-  },
-  {
-    name: 'Poon Hill', difficulty: 'easy', days: 4, interests: ['sunrise', 'culture'], altitude: '3,210m', price: 350, crowd: 'yellow',
-    itinerary: [
-      { day: 1, place: 'Pokhara → Nayapul → Tikhedhunga', desc: 'Drive and short trek.', alt: '1,540m' },
-      { day: 2, place: 'Tikhedhunga → Ghorepani', desc: 'Stone steps through villages and forests.', alt: '2,874m' },
-      { day: 3, place: 'Poon Hill sunrise → Tadapani', desc: 'Pre-dawn hike for panoramic Annapurna views, then trek.', alt: '2,630m' },
-      { day: 4, place: 'Tadapani → Ghandruk → Pokhara', desc: 'Descend to Ghandruk village, drive to Pokhara.', alt: '827m' },
-    ]
-  },
-  {
-    name: 'Upper Mustang', difficulty: 'moderate', days: 14, interests: ['culture', 'offbeat', 'diversity'], altitude: '3,840m', price: 1600, crowd: 'green',
-    itinerary: [
-      { day: 1, place: 'Kathmandu → Pokhara', desc: 'Fly or drive to lakeside city.', alt: '827m' },
-      { day: 2, place: 'Pokhara → Jomsom → Kagbeni', desc: 'Fly to Jomsom, trek to medieval Kagbeni.', alt: '2,810m' },
-      { day: 3, place: 'Kagbeni → Chele', desc: 'Enter restricted Upper Mustang zone.', alt: '3,050m' },
-      { day: 4, place: 'Chele → Syangboche', desc: 'Trek through wind-carved canyons.', alt: '3,475m' },
-      { day: 5, place: 'Syangboche → Ghami', desc: 'Largest village in Upper Mustang.', alt: '3,520m' },
-      { day: 6, place: 'Ghami → Tsarang', desc: 'Visit ancient monastery ruins.', alt: '3,560m' },
-      { day: 7, place: 'Tsarang → Lo Manthang', desc: 'Arrive at the walled kingdom!', alt: '3,840m' },
-      { day: 8, place: 'Lo Manthang', desc: 'Explore caves, monasteries, and the royal palace.', alt: '3,840m' },
-      { day: 9, place: 'Lo Manthang → Dhi', desc: 'Alternative return route through Dhi village.', alt: '3,360m' },
-      { day: 10, place: 'Dhi → Yara → Tangge', desc: 'Remote villages and canyon trails.', alt: '3,240m' },
-      { day: 11, place: 'Tangge → Chhusang', desc: 'Descend along the Kali Gandaki.', alt: '2,980m' },
-      { day: 12, place: 'Chhusang → Jomsom', desc: 'Complete the loop back to Jomsom.', alt: '2,720m' },
-      { day: 13, place: 'Jomsom → Pokhara', desc: 'Fly back to Pokhara.', alt: '827m' },
-      { day: 14, place: 'Pokhara → Kathmandu', desc: 'Return to Kathmandu.', alt: '1,400m' },
-    ]
-  },
-  {
-    name: 'Ghorepani Loop', difficulty: 'easy', days: 5, interests: ['mountains', 'sunrise'], altitude: '2,874m', price: 400, crowd: 'yellow',
-    itinerary: [
-      { day: 1, place: 'Pokhara → Nayapul → Hile', desc: 'Drive and easy trek.', alt: '1,430m' },
-      { day: 2, place: 'Hile → Ghorepani', desc: 'Gradual climb through forests.', alt: '2,874m' },
-      { day: 3, place: 'Poon Hill → Tadapani', desc: 'Sunrise then trek through rhododendron.', alt: '2,630m' },
-      { day: 4, place: 'Tadapani → Ghandruk', desc: 'Beautiful Gurung village.', alt: '1,940m' },
-      { day: 5, place: 'Ghandruk → Nayapul → Pokhara', desc: 'Descend and drive back.', alt: '827m' },
-    ]
-  },
-  {
-    name: 'Manaslu Circuit', difficulty: 'hard', days: 16, interests: ['mountains', 'offbeat'], altitude: '5,106m', price: 1500, crowd: 'green',
-    itinerary: [
-      { day: 1, place: 'Kathmandu → Soti Khola', desc: 'Long drive to the trailhead.', alt: '700m' },
-      { day: 2, place: 'Soti Khola → Machha Khola', desc: 'Follow the Budhi Gandaki valley.', alt: '930m' },
-      { day: 3, place: 'Machha Khola → Jagat', desc: 'Cross suspension bridges, hot springs.', alt: '1,340m' },
-      { day: 4, place: 'Jagat → Deng', desc: 'Enter Manaslu Conservation Area.', alt: '1,860m' },
-      { day: 5, place: 'Deng → Namrung', desc: 'Tibetan culture begins.', alt: '2,660m' },
-      { day: 6, place: 'Namrung → Samagaon', desc: 'Views of Manaslu peak.', alt: '3,530m' },
-      { day: 7, place: 'Samagaon', desc: 'Acclimatization. Visit Birendra Lake.', alt: '3,530m' },
-      { day: 8, place: 'Samagaon → Samdo', desc: 'High altitude village near Tibet border.', alt: '3,860m' },
-      { day: 9, place: 'Samdo → Dharamsala', desc: 'Base camp for the pass.', alt: '4,460m' },
-      { day: 10, place: 'Larkya La Pass → Bimthang', desc: 'Cross 5,106m pass! Steep descent.', alt: '3,590m' },
-      { day: 11, place: 'Bimthang → Tilije', desc: 'Descend into the Marsyangdi valley.', alt: '2,300m' },
-      { day: 12, place: 'Tilije → Dharapani', desc: 'Meet the Annapurna Circuit trail.', alt: '1,860m' },
-      { day: 13, place: 'Dharapani → Jagat', desc: 'Continue descent.', alt: '1,340m' },
-      { day: 14, place: 'Jagat → Soti Khola', desc: 'Final trail day.', alt: '700m' },
-      { day: 15, place: 'Soti Khola → Kathmandu', desc: 'Drive back to Kathmandu.', alt: '1,400m' },
-      { day: 16, place: 'Departure', desc: 'Free day and departure.', alt: '1,400m' },
-    ]
-  },
-];
+import { treks, crowdColors, crowdLabels } from '../data/treks';
 
 const accommodations = [
   { id: 'teahouse', label: 'Tea House Lodge', desc: 'Basic but cozy mountain lodges', priceAdd: 0 },
@@ -209,9 +80,6 @@ const ItineraryPlanner = () => {
     const extrasPrice = answers.extras.reduce((sum, id) => sum + (extras.find(e => e.id === id)?.price || 0), 0);
     return trek.price + accPrice + extrasPrice;
   };
-
-  const crowdColors = { green: '#16a34a', yellow: '#eab308', red: '#dc2626' };
-  const crowdLabels = { green: 'Low Crowd', yellow: 'Moderate', red: 'Busy' };
 
   const generatePDF = (trek) => {
     const doc = new jsPDF();
