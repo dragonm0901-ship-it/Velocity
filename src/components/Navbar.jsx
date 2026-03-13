@@ -34,13 +34,28 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 w-full">
-<nav ref={navRef} className="flex items-center justify-between px-4 py-2 md:px-6 md:py-3 rounded-full transition-all duration-300 w-full max-w-5xl text-pureWhite relative">
-        <div className="font-sans text-xl md:text-2xl brand-text tracking-widest italic font-bold">We Travel Nepal</div>
+      <nav ref={navRef} className="flex items-center justify-between px-4 py-2 md:px-6 md:py-3 rounded-full transition-all duration-300 w-full max-w-5xl text-pureWhite relative">
+        <div className="font-drama text-xl md:text-2xl brand-text tracking-widest italic font-bold">We Travel Nepal</div>
 
-        <div className="hidden md:flex gap-8 items-center font-sans uppercase tracking-widest text-xs font-semibold">
-          <a href="#planner" className="nav-link hover-lift hover:text-softRed transition-colors">Planner</a>
-          <a href="#treks" className="nav-link hover-lift hover:text-softRed transition-colors">Treks & Tours</a>
-          <a href="#about" className="nav-link hover-lift hover:text-softRed transition-colors">About</a>
+        <div className={`${isMobileMenuOpen ? 'flex absolute top-full left-0 right-0 bg-pureWhite/95 backdrop-blur-xl border border-richBlue/10 shadow-lg p-6 flex-col mt-2 rounded-2xl text-richBlue' : 'hidden'} md:flex md:relative md:top-auto md:left-auto md:right-auto md:bg-transparent md:border-none md:shadow-none md:p-0 md:flex-row md:mt-0 md:rounded-none gap-6 md:gap-8 items-center font-sans uppercase tracking-widest text-xs font-semibold`}>
+          <a href="#planner" className={`nav-link hover-lift hover:text-forestGreen transition-colors ${isMobileMenuOpen ? 'text-richBlue' : ''}`}>Planner</a>
+          <a href="#treks" className={`nav-link hover-lift hover:text-forestGreen transition-colors ${isMobileMenuOpen ? 'text-richBlue' : ''}`}>Treks & Tours</a>
+          <a href="#about" className={`nav-link hover-lift hover:text-forestGreen transition-colors ${isMobileMenuOpen ? 'text-richBlue' : ''}`}>About</a>
+
+          {/* Mobile settings & Book Now */}
+          <div className="md:hidden flex flex-col items-center gap-4 mt-2 w-full border-t border-richBlue/10 pt-4">
+            <div className="flex justify-center gap-4 w-full">
+              <select value={language} onChange={(e) => setLanguage(e.target.value)} className="bg-offWhite text-richBlue px-3 py-2 rounded-lg outline-none font-bold">
+                {['EN', 'FR', 'DE', 'ZH'].map(lang => <option key={lang} value={lang}>{lang}</option>)}
+              </select>
+              <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="bg-offWhite text-richBlue px-3 py-2 rounded-lg outline-none font-bold">
+                {['USD', 'EUR', 'NPR'].map(curr => <option key={curr} value={curr}>{curr}</option>)}
+              </select>
+            </div>
+            <button className="w-full bg-forestGreen text-pureWhite px-6 py-3 rounded-full font-sans uppercase tracking-widest text-xs font-semibold hover:bg-forestGreen/90 transition-colors shadow-md">
+              Book Now
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
@@ -89,7 +104,7 @@ const Navbar = () => {
              )}
           </div>
 
-<button className="hidden md:block magnetic-btn bg-softRed text-pureWhite px-6 py-2 rounded-full font-sans uppercase tracking-widest text-xs font-semibold hover:bg-softRed/90 transition-colors shadow-md">
+          <button className="hidden md:block magnetic-btn bg-forestGreen text-pureWhite px-6 py-2 rounded-full font-sans uppercase tracking-widest text-xs font-semibold hover:bg-forestGreen/90 transition-colors shadow-md">
             <span className="relative z-10">Book Now</span>
           </button>
           <button className="md:hidden nav-link p-2 z-50" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
