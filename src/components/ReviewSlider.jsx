@@ -47,7 +47,7 @@ const ReviewSlider = () => {
       </div>
 
       <div className="w-full max-w-4xl relative z-10 flex flex-col items-center">
-        <h2 className="font-sans text-4xl md:text-5xl text-pureWhite mb-12 italic text-center">Traveler Experiences</h2>
+        <h2 className="font-sans text-4xl font-display md:text-5xl font-display text-pureWhite mb-12 italic text-center">Traveler Experiences</h2>
 
         <div className="relative w-full min-h-[300px] flex items-center justify-center">
           {Reviews.map((review, index) => (

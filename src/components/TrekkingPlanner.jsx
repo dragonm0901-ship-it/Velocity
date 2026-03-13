@@ -20,7 +20,7 @@ const TrekkingPlanner = () => {
       case 1:
         return (
           <div className="flex flex-col gap-6 animate-fadeIn">
-            <h3 className="font-sans text-4xl text-richBlue italic mb-2">Select Difficulty</h3>
+            <h3 className="font-sans text-4xl font-display text-richBlue italic mb-2">Select Difficulty</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {['Easy', 'Moderate', 'Challenging'].map((level) => (
                 <button
@@ -41,7 +41,7 @@ const TrekkingPlanner = () => {
       case 2:
         return (
           <div className="flex flex-col gap-6 animate-fadeIn">
-            <h3 className="font-sans text-4xl text-richBlue italic mb-2">Duration (Days)</h3>
+            <h3 className="font-sans text-4xl font-display text-richBlue italic mb-2">Duration (Days)</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {['< 7 Days', '7-14 Days', '> 14 Days'].map((duration) => (
                 <button
@@ -62,7 +62,7 @@ const TrekkingPlanner = () => {
       case 3:
         return (
           <div className="flex flex-col gap-6 animate-fadeIn">
-            <h3 className="font-sans text-4xl text-richBlue italic mb-2">Estimated Budget</h3>
+            <h3 className="font-sans text-4xl font-display text-richBlue italic mb-2">Estimated Budget</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {['Economy', 'Standard', 'Luxury'].map((budget) => (
                 <button
@@ -86,7 +86,7 @@ const TrekkingPlanner = () => {
              <div className="w-20 h-20 rounded-full bg-softRed/20 flex items-center justify-center mb-4">
                 <svg className="w-10 h-10 text-softRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
              </div>
-             <h3 className="font-sans text-4xl text-richBlue italic mb-2">Curated Just For You</h3>
+             <h3 className="font-sans text-4xl font-display text-richBlue italic mb-2">Curated Just For You</h3>
              <p className="font-sans text-richBlue/70 max-w-md">Based on your selections ({selections.difficulty}, {selections.duration}, {selections.budget}), we recommend the <strong>Annapurna Base Camp Trek</strong>.</p>
              <button className="mt-4 bg-softRed text-pureWhite px-8 py-4 rounded-full font-sans font-semibold tracking-wide uppercase hover:bg-softRed/90 transition-colors shadow-lg">
                 View Itinerary

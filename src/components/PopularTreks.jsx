@@ -83,12 +83,12 @@ const PopularTreks = () => {
 
       cards.forEach((card) => {
         gsap.fromTo(card,
-          { y: 100, opacity: 0 },
+          { clipPath: 'inset(100% 0 0 0)', scale: 1.1 },
           {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "power3.out",
+            clipPath: 'inset(0% 0 0 0)',
+            scale: 1,
+            duration: 1.2,
+            ease: "power4.out",
             scrollTrigger: {
               trigger: card,
               start: "top 85%",
@@ -122,7 +122,7 @@ const PopularTreks = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
           <div>
             <h2 className="text-softRed text-xs font-sans font-bold uppercase tracking-[0.3em] mb-4">Nepal 2.0</h2>
-            <h3 className="text-4xl md:text-6xl font-sans text-richBlue font-bold tracking-tight">Expand Your Horizon</h3>
+            <h3 className="text-4xl font-display md:text-6xl font-display font-sans text-richBlue font-bold tracking-tight">Expand Your Horizon</h3>
           </div>
           <p className="max-w-md text-sm font-sans text-richBlue/70 leading-relaxed uppercase tracking-widest">
             From the classic "Big Three" to off-the-grid trends in the Far West and spiritual paths in Lumbini.

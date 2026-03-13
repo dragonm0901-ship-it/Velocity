@@ -19,6 +19,15 @@ const Hero = ({ isReady }) => {
     return () => ctx.revert();
   }, [isReady]);
 
+  const handleSearch = () => {
+    if (searchTerm) {
+      const treksSection = document.getElementById('treks');
+      if (treksSection) {
+        treksSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -48,7 +57,7 @@ const Hero = ({ isReady }) => {
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-4xl px-4 md:px-8 flex flex-col items-center text-center mt-24 md:mt-20">
-        <h1 className="hero-el text-pureWhite font-sans font-bold text-5xl md:text-7xl tracking-wide uppercase mb-4">
+        <h1 className="hero-el text-pureWhite font-sans font-bold text-5xl font-display md:text-7xl font-display tracking-wide uppercase mb-4">
           Find your Adventure
         </h1>
         <p className="hero-el text-offWhite font-sans text-lg md:text-xl mb-12 max-w-2xl">
@@ -66,7 +75,7 @@ const Hero = ({ isReady }) => {
               value={searchTerm}
               onChange={handleSearchChange}
             />
-<button className="bg-softRed text-pureWhite px-6 py-3 md:px-8 md:py-5 font-sans font-semibold uppercase tracking-wider hover:bg-softRed/90 transition-colors">
+<button onClick={handleSearch} className="bg-softRed text-pureWhite px-6 py-3 md:px-8 md:py-5 font-sans font-semibold uppercase tracking-wider hover:bg-softRed/90 transition-colors">
               Search
             </button>
           </div>
@@ -81,6 +90,7 @@ const Hero = ({ isReady }) => {
                   onClick={() => {
                     setSearchTerm(suggestion);
                     setSuggestions([]);
+                    handleSearch();
                   }}
                 >
                   <svg className="w-4 h-4 text-softRed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>

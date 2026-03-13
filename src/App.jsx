@@ -57,7 +57,7 @@ const Preloader = ({ onComplete }) => {
       <div ref={bgRef} className="absolute inset-0 bg-richBlue w-full h-full transform origin-top"></div>
       <div
         ref={textRef}
-        className="relative z-10 font-sans text-pureWhite text-6xl md:text-8xl italic opacity-0 translate-y-10"
+        className="relative z-10 font-sans text-pureWhite text-6xl font-display md:text-8xl font-display italic opacity-0 translate-y-10"
       >
         We Travel Nepal
       </div>
@@ -111,10 +111,10 @@ const GlobalInteractions = () => {
 
 const Footer = () => {
   return (
-    <footer id="about" className="w-full bg-richBlue text-pureWhite rounded-t-[4rem] px-8 md:px-16 pt-24 pb-12 relative z-20">
+    <footer id="about" className="w-full bg-richBlue text-pureWhite  px-8 md:px-16 pt-24 pb-12 relative z-20">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-16 mb-24">
         <div className="flex-1">
-          <h2 className="font-sans text-4xl mb-4 tracking-widest italic font-bold">We Travel Nepal</h2>
+          <h2 className="font-sans text-4xl font-display mb-4 tracking-widest italic font-bold">We Travel Nepal</h2>
           <p className="font-sans font-light text-sm text-pureWhite/60 max-w-xs leading-relaxed uppercase tracking-wider">
             High-performance booking engine for the unique logistics of the Himalayas.
           </p>
@@ -136,8 +136,13 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center pt-8 border-t border-pureWhite/20 gap-4">
         <div className="font-sans font-semibold text-xs text-pureWhite/40 tracking-wider">© {new Date().getFullYear()} We Travel Nepal. All rights reserved.</div>
         <div className="flex gap-4">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe" className="h-4 opacity-50 grayscale hover:grayscale-0 transition-all"/>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/2560px-PayPal.svg.png" alt="PayPal" className="h-4 opacity-50 grayscale hover:grayscale-0 transition-all"/>
+
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe" className="h-4 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"/>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/2560px-PayPal.svg.png" alt="PayPal" className="h-4 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"/>
+          {/* Using placeholder text or generic svgs for eSewa/Fonepay since official high-res SVGs are hard to link directly without assets, simulating the trust badge requirement */}
+          <div className="h-4 font-sans font-bold text-[10px] uppercase tracking-widest text-pureWhite opacity-50 grayscale hover:grayscale-0 hover:opacity-100 hover:text-green-500 transition-all duration-300 flex items-center">eSewa</div>
+          <div className="h-4 font-sans font-bold text-[10px] uppercase tracking-widest text-pureWhite opacity-50 grayscale hover:grayscale-0 hover:opacity-100 hover:text-red-500 transition-all duration-300 flex items-center">Fonepay</div>
+
         </div>
       </div>
     </footer>

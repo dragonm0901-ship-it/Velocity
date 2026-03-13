@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAppContext } from '../context/AppContext';
 
 const rates = {
   USD: 133.50,
@@ -11,6 +12,7 @@ const rates = {
 };
 
 const CurrencyExchange = () => {
+  const { currency: globalCurrency } = useAppContext();
   const [currentIdx, setCurrentIdx] = useState(0);
   const currencies = Object.keys(rates);
 
@@ -21,14 +23,15 @@ const CurrencyExchange = () => {
     return () => clearInterval(interval);
   }, [currencies.length]);
 
-  const currency = currencies[currentIdx];
-  const rate = rates[currency];
+  const displayCurrency = globalCurrency || currencies[currentIdx];
+  const rate = rates[displayCurrency] || rates['USD'];
+
 
   return (
     <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-pureWhite bg-richBlue/80 px-4 py-1.5 rounded-full border border-pureWhite/20 shadow-sm backdrop-blur-md transition-all">
       <span className="text-softRed">LIVE</span>
       <span className="opacity-60">|</span>
-      <span>1 {currency}</span>
+      <span>1 {displayCurrency}</span>
       <span className="opacity-60">=</span>
       <span className="text-pureWhite">Rs. {rate.toFixed(2)}</span>
     </div>

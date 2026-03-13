@@ -14,9 +14,8 @@ export default {
         offWhite: '#F8F9FA'
       },
       fontFamily: {
-        sans: ['Sora', 'sans-serif'],
-        drama: ['"Instrument Serif"', 'serif'],
-        mono: ['"Fira Code"', 'monospace'],
+        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+        display: ['"Clash Display"', 'sans-serif'],
       }
     },
   },
