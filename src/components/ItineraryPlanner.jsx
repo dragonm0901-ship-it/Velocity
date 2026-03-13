@@ -20,8 +20,19 @@ const extras = [
   { id: 'gear', label: 'Full Gear Rental Package', price: 120 },
 ];
 
+const OptionButton = ({ selected, onClick, children }) => (
+  <button
+    onClick={onClick}
+    className={`px-6 py-4 rounded-xl border-2 font-sans text-sm font-semibold transition-all text-left ${
+      selected ? 'border-peakGreen bg-peakGreen/10 text-peakGreen' : 'border-black/10 dark:border-white/10 hover:border-peakGreen/50 text-peakDeep dark:text-peakWhite'
+    }`}
+  >
+    {children}
+  </button>
+);
+
 const ItineraryPlanner = () => {
-  const { t, convertPrice, currency } = useSettings();
+  const { convertPrice } = useSettings();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState({
     difficulty: '', duration: '', interests: [],
@@ -171,19 +182,8 @@ const ItineraryPlanner = () => {
     doc.save(`${trek.name.replace(/\s+/g, '_')}_Itinerary.pdf`);
   };
 
-  const OptionButton = ({ selected, onClick, children }) => (
-    <button
-      onClick={onClick}
-      className={`px-6 py-4 rounded-xl border-2 font-sans text-sm font-semibold transition-all text-left ${
-        selected ? 'border-peakGreen bg-peakGreen/10 text-peakGreen' : 'border-black/10 dark:border-white/10 hover:border-peakGreen/50 text-peakDeep dark:text-peakWhite'
-      }`}
-    >
-      {children}
-    </button>
-  );
-
   return (
-    <section id="planner" className="py-24 md:py-32 px-6 md:px-16 w-full bg-gray-50 dark:bg-peakDeep/80 transition-colors">
+    <section id="itinerary-planner" className="py-24 md:py-32 px-6 md:px-16 w-full bg-gray-50 dark:bg-peakDeep/80 transition-colors">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="font-display font-bold text-3xl md:text-5xl text-peakDeep dark:text-peakWhite mb-4">Plan Your Trek</h2>

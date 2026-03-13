@@ -43,7 +43,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section ref={heroRef} className="relative w-full h-[100dvh] flex items-center justify-center overflow-hidden">
+    <section id="hero" ref={heroRef} className="relative w-full h-[100dvh] flex items-center justify-center overflow-hidden">
       {/* Static Background Image */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img

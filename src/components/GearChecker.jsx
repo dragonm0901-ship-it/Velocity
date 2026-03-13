@@ -88,7 +88,7 @@ const GearChecker = () => {
   const resetAll = () => setChecked({});
 
   return (
-    <section className="py-24 md:py-32 px-6 md:px-16 w-full bg-peakWhite dark:bg-peakDark transition-colors">
+    <section id="gear-checker" className="py-24 md:py-32 px-6 md:px-16 w-full bg-peakWhite dark:bg-peakDark transition-colors">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="font-display font-bold text-3xl md:text-5xl text-peakDeep dark:text-peakWhite mb-4">

@@ -3,55 +3,7 @@ import { X, MapPin } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Real trekking route waypoints (actual GPS coordinates)
-const trekRoutes = {
-  'Everest Base Camp': {
-    center: [27.9881, 86.925],
-    zoom: 10,
-    waypoints: [
-      [27.6872, 86.7316, 'Lukla (2,860m)'],
-      [27.7085, 86.7133, 'Phakding (2,610m)'],
-      [27.8063, 86.7104, 'Namche Bazaar (3,440m)'],
-      [27.8371, 86.7673, 'Tengboche (3,860m)'],
-      [27.8656, 86.8113, 'Dingboche (4,410m)'],
-      [27.9098, 86.8296, 'Lobuche (4,940m)'],
-      [27.9353, 86.8296, 'Gorak Shep (5,164m)'],
-      [28.0025, 86.8528, 'Everest Base Camp (5,364m)'],
-    ],
-    crowd: 'red',
-  },
-  'Annapurna Circuit': {
-    center: [28.6, 84.2],
-    zoom: 9,
-    waypoints: [
-      [28.2698, 84.3729, 'Besisahar (760m)'],
-      [28.3831, 84.3664, 'Bahundanda (1,310m)'],
-      [28.4757, 84.3650, 'Chame (2,670m)'],
-      [28.5385, 84.2242, 'Upper Pisang (3,310m)'],
-      [28.6321, 84.1291, 'Manang (3,540m)'],
-      [28.7033, 83.9739, 'Ledar (4,200m)'],
-      [28.7714, 83.9362, 'Thorong Phedi (4,525m)'],
-      [28.7982, 83.9338, 'Thorong La Pass (5,416m)'],
-      [28.8048, 83.8706, 'Muktinath (3,760m)'],
-      [28.6898, 83.6466, 'Jomsom (2,720m)'],
-    ],
-    crowd: 'yellow',
-  },
-  'Mardi Himal Trek': {
-    center: [28.4, 83.9],
-    zoom: 11,
-    waypoints: [
-      [28.2466, 83.9488, 'Kande (1,770m)'],
-      [28.3100, 83.8640, 'Pothana (1,890m)'],
-      [28.3500, 83.8700, 'Forest Camp (2,550m)'],
-      [28.3800, 83.8600, 'Low Camp (2,990m)'],
-      [28.4200, 83.8500, 'High Camp (3,580m)'],
-      [28.4600, 83.8700, 'Upper View Point (4,200m)'],
-      [28.4900, 83.8800, 'Mardi Himal Base Camp (4,500m)'],
-    ],
-    crowd: 'green',
-  },
-};
+import { trekRoutes } from '../data/routes';
 
 const TrailMap = ({ isOpen, onClose, trekName }) => {
   const mapRef = useRef(null);

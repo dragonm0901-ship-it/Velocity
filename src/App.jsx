@@ -55,17 +55,18 @@ const useOnlineStatus = () => {
   return isOnline;
 };
 
+const sections = [
+  { id: 'hero', label: 'Top' },
+  { id: 'destinations', label: 'Treks' },
+  { id: 'itinerary-planner', label: 'Planner' },
+  { id: 'features', label: 'Features' },
+  { id: 'weather-widget', label: 'Weather' },
+  { id: 'gear-checker', label: 'Gear' },
+  { id: 'testimonials', label: 'Reviews' }
+];
+
 const InteractiveTimeline = () => {
   const [activeSection, setActiveSection] = useState('hero');
-  const sections = [
-    { id: 'hero', label: 'Top' },
-    { id: 'destinations', label: 'Treks' },
-    { id: 'itinerary-planner', label: 'Planner' },
-    { id: 'features', label: 'Features' },
-    { id: 'weather-widget', label: 'Weather' },
-    { id: 'gear-checker', label: 'Gear' },
-    { id: 'testimonials', label: 'Reviews' }
-  ];
 
   useEffect(() => {
     const observerOptions = {

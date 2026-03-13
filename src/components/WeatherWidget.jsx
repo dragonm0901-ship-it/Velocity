@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Thermometer, Wind, CloudRain, Sun } from 'lucide-react';
 
 // Simulated weather data for key trekking locations
@@ -23,7 +23,7 @@ const WeatherWidget = () => {
   const Icon = conditionIcons[loc.condition] || Sun;
 
   return (
-    <section className="py-16 px-6 md:px-16 w-full bg-gray-50 dark:bg-peakDeep/50 transition-colors">
+    <section id="weather-widget" className="py-16 px-6 md:px-16 w-full bg-gray-50 dark:bg-peakDeep/50 transition-colors">
       <div className="max-w-5xl mx-auto">
         <h3 className="font-display font-bold text-2xl md:text-3xl text-peakDeep dark:text-peakWhite mb-8 text-center">
           Trail Weather Conditions
