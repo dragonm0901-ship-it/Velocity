@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-ghost text-graphite overflow-x-hidden cursor-none;
+    @apply bg-offWhite text-richBlue overflow-x-hidden cursor-none;
   }
 
   a, button, input, textarea {
