@@ -81,13 +81,16 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll indicator - hidden on mobile, nature-inspired on desktop */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-4">
-        <span className="text-white/60 text-[10px] font-sans uppercase tracking-[0.2em]">{t('hero.scroll')}</span>
-        <div className="w-px h-16 bg-white/20 relative overflow-hidden">
-          {/* Animated flowing line representing a trail or waterfall */}
-          <div className="w-full h-1/2 bg-white/80 absolute top-0 -translate-y-full animate-[scrolldown_2s_ease-in-out_infinite]"></div>
+      {/* Scroll indicator - hidden on mobile, trekking-themed on desktop */}
+      <div 
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2 cursor-pointer group" 
+        onClick={() => document.getElementById('destinations').scrollIntoView({ behavior: 'smooth' })}
+      >
+        <div className="flex items-center gap-2 text-white/50 group-hover:text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+          <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] mt-0.5">Start Trek</span>
         </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-peakGreen animate-bounce mt-1 drop-shadow-[0_0_5px_rgba(22,101,52,0.8)]"><path d="m6 9 6 6 6-6"/></svg>
       </div>
     </section>
   );
