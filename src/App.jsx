@@ -66,73 +66,6 @@ const Preloader = ({ onComplete }) => {
   );
 };
 
-const CustomCursor = () => {
-  const cursorRef = useRef(null);
-
-  useEffect(() => {
-    const cursor = cursorRef.current;
-
-    gsap.set(cursor, { xPercent: -50, yPercent: -50 });
-
-    const moveCursor = (e) => {
-      gsap.to(cursor, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.15,
-        ease: "power2.out"
-      });
-    };
-
-    const handleHover = () => {
-      gsap.to(cursor, {
-        scale: 2.5,
-        backgroundColor: "transparent",
-        border: "1px solid #FF6347", // softRed
-        duration: 0.3,
-      });
-    };
-
-    const handleHoverOut = () => {
-      gsap.to(cursor, {
-        scale: 1,
-        backgroundColor: "#FF6347", // softRed
-        border: "1px solid transparent",
-        duration: 0.3,
-      });
-    };
-
-    const onMouseOver = (e) => {
-      const el = e.target.closest('a, button, .magnetic-btn, .hover-target');
-      if (el && !el.contains(e.relatedTarget)) {
-        handleHover();
-      }
-    };
-
-    const onMouseOut = (e) => {
-      const el = e.target.closest('a, button, .magnetic-btn, .hover-target');
-      if (el && !el.contains(e.relatedTarget)) {
-        handleHoverOut();
-      }
-    };
-
-    window.addEventListener('mousemove', moveCursor);
-    window.addEventListener('mouseover', onMouseOver);
-    window.addEventListener('mouseout', onMouseOut);
-
-    return () => {
-      window.removeEventListener('mousemove', moveCursor);
-      window.removeEventListener('mouseover', onMouseOver);
-      window.removeEventListener('mouseout', onMouseOut);
-    };
-  }, []);
-
-  return (
-    <div
-      ref={cursorRef}
-      className="fixed top-0 left-0 w-3 h-3 bg-softRed rounded-full pointer-events-none z-[9999] mix-blend-difference shadow-[0_0_10px_rgba(255,99,71,0.5)]"
-    ></div>
-  );
-};
 
 const GlobalInteractions = () => {
   useEffect(() => {
@@ -243,7 +176,6 @@ function App() {
     <>
       <GlobalInteractions />
       {!preloaderDone && <Preloader onComplete={() => setPreloaderDone(true)} />}
-      <CustomCursor />
       <WhatsAppFloat />
       <CommunityHub />
 

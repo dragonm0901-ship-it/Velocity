@@ -47,7 +47,7 @@ const Hero = ({ isReady }) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-4xl px-8 flex flex-col items-center text-center mt-20">
+      <div className="relative z-10 w-full max-w-4xl px-4 md:px-8 flex flex-col items-center text-center mt-24 md:mt-20">
         <h1 className="hero-el text-pureWhite font-sans font-bold text-5xl md:text-7xl tracking-wide uppercase mb-4">
           Find your Adventure
         </h1>
@@ -62,11 +62,11 @@ const Hero = ({ isReady }) => {
             <input
               type="text"
               placeholder="Search 'Everest', 'Pokhara', or 'Helicopter'..."
-              className="w-full py-5 px-4 text-richBlue font-sans outline-none bg-transparent"
+              className="w-full py-3 px-4 md:py-5 text-richBlue font-sans outline-none bg-transparent"
               value={searchTerm}
               onChange={handleSearchChange}
             />
-            <button className="bg-softRed text-pureWhite px-8 py-5 font-sans font-semibold uppercase tracking-wider hover:bg-softRed/90 transition-colors">
+<button className="bg-softRed text-pureWhite px-6 py-3 md:px-8 md:py-5 font-sans font-semibold uppercase tracking-wider hover:bg-softRed/90 transition-colors">
               Search
             </button>
           </div>

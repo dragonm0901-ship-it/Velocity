@@ -9,6 +9,7 @@ const Navbar = () => {
   const [currency, setCurrency] = useState('USD');
   const [language, setLanguage] = useState('EN');
   const [showSettings, setShowSettings] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -33,8 +34,8 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 w-full">
-      <nav ref={navRef} className="flex items-center justify-between px-6 py-3 rounded-full transition-all duration-300 w-full max-w-5xl text-pureWhite relative">
-        <div className="font-sans text-2xl brand-text tracking-widest italic font-bold">We Travel Nepal</div>
+<nav ref={navRef} className="flex items-center justify-between px-4 py-2 md:px-6 md:py-3 rounded-full transition-all duration-300 w-full max-w-5xl text-pureWhite relative">
+        <div className="font-sans text-xl md:text-2xl brand-text tracking-widest italic font-bold">We Travel Nepal</div>
 
         <div className="hidden md:flex gap-8 items-center font-sans uppercase tracking-widest text-xs font-semibold">
           <a href="#planner" className="nav-link hover-lift hover:text-softRed transition-colors">Planner</a>
@@ -42,9 +43,9 @@ const Navbar = () => {
           <a href="#about" className="nav-link hover-lift hover:text-softRed transition-colors">About</a>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           {/* Settings Toggle (Currency & Language) */}
-          <div className="relative">
+          <div className="relative hidden md:block">
              <button
                onClick={() => setShowSettings(!showSettings)}
                className="nav-link hover-lift flex items-center gap-1 font-sans text-xs uppercase tracking-widest font-semibold"
@@ -88,8 +89,13 @@ const Navbar = () => {
              )}
           </div>
 
-          <button className="magnetic-btn bg-softRed text-pureWhite px-6 py-2 rounded-full font-sans uppercase tracking-widest text-xs font-semibold hover:bg-softRed/90 transition-colors shadow-md">
+<button className="hidden md:block magnetic-btn bg-softRed text-pureWhite px-6 py-2 rounded-full font-sans uppercase tracking-widest text-xs font-semibold hover:bg-softRed/90 transition-colors shadow-md">
             <span className="relative z-10">Book Now</span>
+          </button>
+          <button className="md:hidden nav-link p-2 z-50" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+            </svg>
           </button>
         </div>
       </nav>

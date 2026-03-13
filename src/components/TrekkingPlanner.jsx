@@ -99,16 +99,16 @@ const TrekkingPlanner = () => {
   };
 
   return (
-    <section id="planner" className="py-32 px-8 w-full bg-offWhite flex justify-center">
+    <section id="planner" className="py-16 md:py-32 px-4 md:px-8 w-full bg-offWhite flex justify-center">
       <div className="w-full max-w-4xl bg-pureWhite rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
 
         {/* Progress Sidebar */}
-        <div className="w-full md:w-1/3 bg-richBlue p-10 flex flex-col justify-between text-pureWhite">
+        <div className="w-full md:w-1/3 bg-richBlue p-6 md:p-10 flex flex-col justify-between text-pureWhite">
            <div>
              <h2 className="font-sans font-bold text-2xl mb-8 tracking-wide">Dynamic Planner</h2>
              <p className="font-sans text-sm text-pureWhite/70 mb-12">Let us curate the perfect Himalayan experience based on your preferences.</p>
 
-             <div className="space-y-6">
+             <div className="flex gap-4 overflow-x-auto pb-4 md:pb-0 md:flex-col md:space-y-6 md:gap-0 scrollbar-hide">
                 {[1, 2, 3].map((num) => (
                   <div key={num} className="flex items-center gap-4">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${
@@ -126,7 +126,7 @@ const TrekkingPlanner = () => {
         </div>
 
         {/* Content Area */}
-        <div className="w-full md:w-2/3 p-10 md:p-16 flex flex-col justify-between">
+        <div className="w-full md:w-2/3 p-6 md:p-16 flex flex-col justify-between">
            <div className="min-h-[250px] flex flex-col justify-center">
              {renderStepContent()}
            </div>

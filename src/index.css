@@ -4,12 +4,9 @@
 
 @layer base {
   body {
-    @apply bg-offWhite text-richBlue overflow-x-hidden cursor-none;
+    @apply bg-offWhite text-richBlue overflow-x-hidden;
   }
 
-  a, button, input, textarea {
-    @apply cursor-none;
-  }
 }
 
 .magnetic-btn {
