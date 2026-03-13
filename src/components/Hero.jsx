@@ -67,7 +67,6 @@ const Hero = ({ isReady }) => {
               onChange={handleSearchChange}
             />
 <button className="bg-softRed text-pureWhite px-6 py-3 md:px-8 md:py-5 font-sans font-semibold uppercase tracking-wider hover:bg-softRed/90 transition-colors">
-            <button className="bg-forestGreen text-pureWhite px-6 py-3 md:px-8 md:py-5 font-sans font-semibold uppercase tracking-wider hover:bg-forestGreen/90 transition-colors">
               Search
             </button>
           </div>

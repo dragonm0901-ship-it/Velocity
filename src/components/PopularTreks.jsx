@@ -117,12 +117,15 @@ const PopularTreks = () => {
   };
 
   return (
-    <section id="treks" className="py-16 md:py-32 px-4 md:px-8 w-full bg-pureWhite flex flex-col items-center">
-      <div className="w-full max-w-6xl">
-        <div className="text-center mb-16">
-          <h2 className="font-drama text-5xl md:text-6xl text-richBlue mb-4 italic">Iconic Expeditions</h2>
-          <p className="font-sans text-richBlue/60 uppercase tracking-widest text-sm max-w-2xl mx-auto">
-            Real-time availability, dynamic pricing, and immediate booking for the most sought-after trails.
+    <section id="treks" ref={containerRef} className="py-24 bg-pureWhite relative z-10 w-full overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 md:px-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
+          <div>
+            <h2 className="text-softRed text-xs font-sans font-bold uppercase tracking-[0.3em] mb-4">Nepal 2.0</h2>
+            <h3 className="text-4xl md:text-6xl font-sans text-richBlue font-bold tracking-tight">Expand Your Horizon</h3>
+          </div>
+          <p className="max-w-md text-sm font-sans text-richBlue/70 leading-relaxed uppercase tracking-widest">
+            From the classic "Big Three" to off-the-grid trends in the Far West and spiritual paths in Lumbini.
           </p>
         </div>
 
@@ -150,9 +153,12 @@ const PopularTreks = () => {
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="p-5 md:p-8">
-                <h3 className="font-drama text-3xl text-richBlue mb-2 italic">{trek.name}</h3>
+              {/* Content Container */}
+              <div className="p-5 md:p-8 relative bg-pureWhite">
+                <div className="flex justify-between items-start mb-4">
+                  <h4 className="text-xl font-sans font-bold text-richBlue uppercase tracking-wide">{trek.title}</h4>
+                  <span className="text-softRed font-bold text-xl">{trek.price}</span>
+                </div>
 
                 <div className="flex gap-4 mb-8">
                   <div className="flex flex-col gap-1">
