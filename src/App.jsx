@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Destinations from './components/Destinations';
@@ -9,6 +9,7 @@ import WeatherWidget from './components/WeatherWidget';
 import Testimonials from './components/Testimonials';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
+import Compass from './components/Compass';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -57,6 +58,8 @@ const AltitudeProgress = () => {
 };
 
 function App() {
+  const [compassOpen, setCompassOpen] = useState(false);
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -82,7 +85,8 @@ function App() {
       </a>
       <AltitudeProgress />
       <WhatsAppFloat />
-      <Navbar />
+      <Navbar onCompassOpen={() => setCompassOpen(true)} />
+      <Compass isOpen={compassOpen} onClose={() => setCompassOpen(false)} />
       <main id="main-content">
         <Hero />
         <Destinations />
