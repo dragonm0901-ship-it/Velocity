@@ -87,29 +87,28 @@ const CustomCursor = () => {
       });
     };
 
+    const onMouseOver = (e) => {
+      const el = e.target.closest('a, button, .magnetic-btn, .hover-target');
+      if (el && !el.contains(e.relatedTarget)) {
+        handleHover();
+      }
+    };
+
+    const onMouseOut = (e) => {
+      const el = e.target.closest('a, button, .magnetic-btn, .hover-target');
+      if (el && !el.contains(e.relatedTarget)) {
+        handleHoverOut();
+      }
+    };
+
     window.addEventListener('mousemove', moveCursor);
-
-    // MutationObserver to catch elements loaded after initial render
-    const observer = new MutationObserver(() => {
-        const interactiveElements = document.querySelectorAll('a, button, .magnetic-btn, .hover-target');
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', handleHover);
-            el.addEventListener('mouseleave', handleHoverOut);
-        });
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    // Initial attach
-    const initialElements = document.querySelectorAll('a, button, .magnetic-btn, .hover-target');
-    initialElements.forEach(el => {
-        el.addEventListener('mouseenter', handleHover);
-        el.addEventListener('mouseleave', handleHoverOut);
-    });
+    window.addEventListener('mouseover', onMouseOver);
+    window.addEventListener('mouseout', onMouseOut);
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
-      observer.disconnect();
+      window.removeEventListener('mouseover', onMouseOver);
+      window.removeEventListener('mouseout', onMouseOut);
     };
   }, []);
 
