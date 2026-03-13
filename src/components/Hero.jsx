@@ -48,7 +48,7 @@ const Hero = () => {
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img
           ref={imageRef}
-          src="https://plus.unsplash.com/premium_photo-1661963741928-673ed7f7c00b?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src="https://plus.unsplash.com/premium_photo-1692386759483-c3b25c241acd?q=80&w=1476&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="Panoramic view of the Himalayan mountains in Nepal with snow-covered peaks"
           className="w-full h-full object-cover"
           loading="eager"
