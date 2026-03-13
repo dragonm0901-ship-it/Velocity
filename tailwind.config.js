@@ -7,15 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        deepVoid: '#121212', // deepCharcoal
-        plasma: '#D4AF37',   // mutedGold
-        ghost: '#FAFAFA',    // cream
-        graphite: '#1A1A1A'  // slightly lighter charcoal
+        richBlue: '#0F52BA', // Sapphire blue
+        forestGreen: '#228B22',
+        softRed: '#FF6347',
+        pureWhite: '#FFFFFF',
+        offWhite: '#F8F9FA'
       },
       fontFamily: {
-        sans: ['Sora', 'sans-serif'],
-        drama: ['"Instrument Serif"', 'serif'],
-        mono: ['"Fira Code"', 'monospace'],
+        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+        display: ['"Clash Display"', 'sans-serif'],
       }
     },
   },
