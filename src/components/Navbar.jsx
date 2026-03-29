@@ -29,7 +29,7 @@ const Navbar = ({ onCompassOpen }) => {
   ];
 
   return (
-    <div className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8 flex justify-center pointer-events-none">
+    <div className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8 flex flex-col items-center gap-3 pointer-events-none">
       <nav className="flex items-center justify-between px-4 py-3 md:px-10 md:py-5 rounded-2xl md:rounded-full transition-all duration-300 w-[90%] md:w-full max-w-[1600px] bg-white/70 dark:bg-peakDeep/80 backdrop-blur-xl border border-black/5 dark:border-white/10 text-peakDeep dark:text-peakWhite shadow-lg pointer-events-auto">
         
         <a href="#" className="font-display text-sm sm:text-base md:text-2xl font-bold tracking-wider shrink-0 mt-0.5">
@@ -102,32 +102,32 @@ const Navbar = ({ onCompassOpen }) => {
       </nav>
 
       {mobileOpen && (
-        <div className="md:hidden fixed top-[72px] left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-white/95 dark:bg-peakDeep/95 backdrop-blur-xl rounded-2xl border border-black/5 dark:border-white/10 shadow-xl p-5 flex flex-col gap-4 z-[49]">
+        <div className="md:hidden w-[90%] max-w-md bg-white/95 dark:bg-peakDeep/95 backdrop-blur-xl rounded-2xl border border-black/5 dark:border-white/10 shadow-xl p-5 flex flex-col gap-4 z-[49] pointer-events-auto">
           {navLinks.map(link => (
             <a key={link.href} href={link.href}
-              className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors"
-              onClick={() => setMobileOpen(false)}>{link.label}</a>
+               className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors"
+               onClick={() => setMobileOpen(false)}>{link.label}</a>
           ))}
           <button onClick={() => { onCompassOpen(); setMobileOpen(false); }}
-            className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors text-left flex items-center gap-2">
+                  className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors text-left flex items-center gap-2">
             <CompassIcon size={20} /> Compass
           </button>
           
           <button onClick={() => { handleThemeToggle(); setMobileOpen(false); }}
-            className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors text-left flex items-center gap-2">
+                  className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors text-left flex items-center gap-2">
             {theme === 'light' ? <Sun size={20} /> : <Cloud size={20} />}
             {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
           </button>
           
           <div className="flex gap-3 pt-2">
             <select className="flex-1 bg-transparent border border-black/10 dark:border-white/15 rounded-lg px-3 py-2 cursor-pointer font-sans text-sm font-semibold text-peakDeep dark:text-peakWhite"
-              value={currency} onChange={(e) => setCurrency(e.target.value)} aria-label="Select currency">
+                    value={currency} onChange={(e) => setCurrency(e.target.value)} aria-label="Select currency">
               <option value="NPR">🇳🇵 NPR</option>
               <option value="USD">🇺🇸 USD</option>
               <option value="EUR">🇪🇺 EUR</option>
             </select>
             <select className="flex-1 bg-transparent border border-black/10 dark:border-white/15 rounded-lg px-3 py-2 cursor-pointer font-sans text-sm font-semibold text-peakDeep dark:text-peakWhite"
-              value={language} onChange={(e) => setLanguage(e.target.value)} aria-label="Select language">
+                    value={language} onChange={(e) => setLanguage(e.target.value)} aria-label="Select language">
               <option value="EN">English</option>
               <option value="FR">Français</option>
               <option value="DE">Deutsch</option>
@@ -135,7 +135,7 @@ const Navbar = ({ onCompassOpen }) => {
             </select>
           </div>
           <a href="#destinations" className="bg-peakGreen text-white px-6 py-3 rounded-full font-sans uppercase tracking-widest text-sm font-bold text-center hover:shadow-lg transition-all"
-            onClick={() => setMobileOpen(false)}>{t('nav.book')}</a>
+             onClick={() => setMobileOpen(false)}>{t('nav.book')}</a>
         </div>
       )}
     </div>
