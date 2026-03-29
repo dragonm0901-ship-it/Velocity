@@ -4,7 +4,9 @@ import Hero from './components/Hero';
 import Destinations from './components/Destinations';
 import FeaturesBox from './components/FeaturesBox';
 import ItineraryPlanner from './components/ItineraryPlanner';
+import PermitDashboard from './components/PermitDashboard';
 import GearChecker from './components/GearChecker';
+import FitnessCalculator from './components/FitnessCalculator';
 import WeatherWidget from './components/WeatherWidget';
 import Testimonials from './components/Testimonials';
 import CTA from './components/CTA';
@@ -61,7 +63,9 @@ const sections = [
   { id: 'itinerary-planner', label: 'Planner' },
   { id: 'features', label: 'Features' },
   { id: 'weather-widget', label: 'Weather' },
+  { id: 'permit-dashboard', label: 'Permits' },
   { id: 'gear-checker', label: 'Gear' },
+  { id: 'fitness-calculator', label: 'Fitness' },
   { id: 'testimonials', label: 'Reviews' }
 ];
 
@@ -168,7 +172,13 @@ function App() {
         <ItineraryPlanner />
         <FeaturesBox />
         <WeatherWidget />
+        <div id="permit-dashboard">
+          <PermitDashboard />
+        </div>
         <GearChecker />
+        <div id="fitness-calculator">
+          <FitnessCalculator />
+        </div>
         <Testimonials />
         <CTA />
       </main>

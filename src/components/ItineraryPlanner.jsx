@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import { CalendarDays, Mountain, Gauge, ArrowRight, ArrowLeft, CheckCircle, Footprints, TrendingUp, Clock, Timer, CalendarRange, Download, Users, Bed, UtensilsCrossed, Backpack, Map } from 'lucide-react';
-import jsPDF from 'jspdf';
+import ElevationProfile from './ElevationProfile';
 
 const steps = ['difficulty', 'duration', 'interests', 'accommodation', 'extras'];
 
@@ -92,98 +92,195 @@ const ItineraryPlanner = () => {
     return trek.price + accPrice + extrasPrice;
   };
 
-  const generatePDF = (trek) => {
-    const doc = new jsPDF();
-    const total = getTotalPrice(trek);
-    const acc = accommodations.find(a => a.id === answers.accommodation);
+  const generatePDF = async (trek) => {
+    try {
+      const { default: jsPDF } = await import('jspdf');
+      const doc = new jsPDF();
+      const total = getTotalPrice(trek);
+      const acc = accommodations.find(a => a.id === answers.accommodation);
 
-    // Title
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(24);
-    doc.setTextColor(15, 23, 42);
-    doc.text('PROJECT PEAK', 20, 25);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100);
-    doc.text('Your Personalized Trek Itinerary', 20, 33);
+      // Utility to strip ANY non-ASCII character that corrupts jsPDF's internal byte stream
+      const clean = (str) => String(str || '').replace(/[^\x20-\x7E]/g, '');
 
-    // Trek info
-    doc.setDrawColor(22, 101, 52);
-    doc.setLineWidth(0.5);
-    doc.line(20, 38, 190, 38);
+      // Title
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(24);
+      doc.setTextColor(15, 23, 42);
+      doc.text(clean('PROJECT PEAK'), 20, 25);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100);
+      doc.text(clean('Detailed Trek Itinerary & Quote'), 20, 33);
 
-    doc.setFontSize(18);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(22, 101, 52);
-    doc.text(trek.name, 20, 50);
+      // Trek info
+      doc.setDrawColor(22, 101, 52);
+      doc.setLineWidth(0.5);
+      doc.line(20, 38, 190, 38);
 
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(80);
-    doc.text(`${trek.days} Days  |  Max Altitude: ${trek.altitude}  |  Difficulty: ${trek.difficulty.charAt(0).toUpperCase() + trek.difficulty.slice(1)}`, 20, 58);
-    doc.text(`Accommodation: ${acc?.label}  |  Total: ${convertPrice(total)}`, 20, 65);
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(22, 101, 52);
+      doc.text(clean(trek.name), 20, 50);
 
-    if (answers.extras.length > 0) {
-      const extNames = answers.extras.map(id => extras.find(e => e.id === id)?.label).join(', ');
-      doc.text(`Add-ons: ${extNames}`, 20, 72);
-    }
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(80);
+      const diffStr = trek.difficulty ? trek.difficulty.charAt(0).toUpperCase() + trek.difficulty.slice(1) : '';
+      doc.text(clean(`${trek.days} Days  |  Max Alt: ${trek.altitude}  |  Difficulty: ${diffStr}`), 20, 58);
+      
+      const accLabel = acc ? acc.label : 'None';
+      doc.text(clean(`Base: ${convertPrice(trek.price)}  |  Accomm: ${accLabel}  |  Total: ${convertPrice(total)}`), 20, 65);
 
-    // Itinerary table
-    let y = answers.extras.length > 0 ? 85 : 80;
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(13);
-    doc.setTextColor(15, 23, 42);
-    doc.text('Day-by-Day Itinerary', 20, y);
-    y += 10;
+      if (answers.extras && answers.extras.length > 0) {
+        const extNames = answers.extras.map(id => extras.find(e => e.id === id)?.label).filter(Boolean).join(', ');
+        doc.text(clean(`Add-ons Included: ${extNames}`), 20, 72);
+      }
 
-    // Table header
-    doc.setFillColor(22, 101, 52);
-    doc.setTextColor(255);
-    doc.setFontSize(9);
-    doc.rect(20, y - 5, 170, 8, 'F');
-    doc.text('DAY', 24, y);
-    doc.text('LOCATION', 42, y);
-    doc.text('ALT', 120, y);
-    doc.text('DESCRIPTION', 138, y);
-    y += 8;
+      let y = (answers.extras && answers.extras.length > 0) ? 85 : 80;
 
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(60);
+      // Mount Elevation Profile Chart
+      const svgEl = document.getElementById('elevation-profile-svg');
+      if (svgEl) {
+        try {
+          const svgImage = await new Promise((resolve) => {
+            const clone = svgEl.cloneNode(true);
+            clone.querySelectorAll('text').forEach(t => {
+              t.setAttribute('fill', '#64748b');
+              t.setAttribute('font-family', 'helvetica, sans-serif');
+            });
+            const svgData = new XMLSerializer().serializeToString(clone);
+            const img = new Image();
+            img.onload = () => {
+              const canvas = document.createElement('canvas');
+              canvas.width = 800;
+              canvas.height = 250;
+              const ctx = canvas.getContext('2d');
+              ctx.fillStyle = "#f8fafc"; // Very slight off-white for visual depth
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(img, 0, 0, 800, 250);
+              resolve(canvas.toDataURL('image/png'));
+            };
+            img.onerror = () => resolve(null);
+            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+          });
 
-    trek.itinerary.forEach((day) => {
+          if (svgImage) {
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(13);
+            doc.setTextColor(15, 23, 42);
+            doc.text(clean('Elevation Profile'), 20, y);
+            y += 6;
+            
+            // Render perfectly onto a 170x53 rectangle inside standard A4 
+            doc.addImage(svgImage, 'PNG', 20, y, 170, 53);
+            y += 65; 
+          }
+        } catch {
+          console.warn('Silent fallback: Could not mount svg to PDF context.');
+        }
+      }
+
+      // Check page overrun
       if (y > 270) {
         doc.addPage();
-        y = 25;
+        y = 20;
       }
-      const bg = day.day % 2 === 0;
-      if (bg) {
-        doc.setFillColor(245, 247, 250);
-        doc.rect(20, y - 4, 170, 7, 'F');
-      }
-      doc.setFontSize(8);
-      doc.text(`${day.day}`, 26, y);
+
+      // Itinerary table
       doc.setFont('helvetica', 'bold');
-      doc.text(day.place.substring(0, 30), 42, y);
+      doc.setFontSize(13);
+      doc.setTextColor(15, 23, 42);
+      doc.text(clean('Full Day-by-Day Itinerary'), 20, y);
+      y += 10;
+
+      // Table header
+      doc.setFillColor(22, 101, 52);
+      doc.setTextColor(255);
+      doc.setFontSize(9);
+      doc.rect(20, y - 5, 170, 8, 'F');
+      doc.text(clean('DAY'), 24, y);
+      doc.text(clean('LOCATION'), 42, y);
+      doc.text(clean('ALT'), 120, y);
+      doc.text(clean('DESCRIPTION'), 138, y);
+      y += 8;
+
       doc.setFont('helvetica', 'normal');
-      doc.text(day.alt, 122, y);
-      doc.text(day.desc.substring(0, 35), 138, y);
-      y += 7;
-    });
+      doc.setTextColor(60);
 
-    // Footer
-    y = Math.max(y + 10, 250);
-    if (y > 270) { doc.addPage(); y = 25; }
-    doc.setDrawColor(22, 101, 52);
-    doc.line(20, y, 190, y);
-    doc.setFontSize(8);
-    doc.setTextColor(150);
-    doc.text('Generated by Project Peak | projectpeak.com | +977 1 4411123', 20, y + 7);
+      const chunkText = (text, maxLength) => {
+        if (!text) return [''];
+        const words = clean(text).split(' ');
+        const lines = [];
+        let currentLine = '';
+        words.forEach(word => {
+          if ((currentLine + word).length > maxLength) {
+            if (currentLine.trim()) lines.push(currentLine.trim());
+            currentLine = word + ' ';
+          } else {
+            currentLine += word + ' ';
+          }
+        });
+        if (currentLine.trim()) lines.push(currentLine.trim());
+        return lines.length > 0 ? lines : [''];
+      };
 
-    doc.save(`${trek.name.replace(/\s+/g, '_')}_Itinerary.pdf`);
+      trek.itinerary.forEach((day) => {
+        const placeLines = chunkText(day.place, 35);
+        const descLines = chunkText(day.desc, 38);
+        
+        const maxLines = Math.max(placeLines.length, descLines.length);
+        const rowHeight = (maxLines * 5) + 2;
+
+        if (y + rowHeight > 270) {
+          doc.addPage();
+          y = 25;
+        }
+
+        const bg = day.day % 2 === 0;
+        if (bg) {
+          doc.setFillColor(245, 247, 250);
+          doc.rect(20, y - 4, 170, rowHeight, 'F');
+        }
+
+        doc.setFontSize(8);
+        doc.text(clean(day.day), 26, y);
+        
+        doc.setFont('helvetica', 'bold');
+        placeLines.forEach((line, idx) => {
+          doc.text(line, 42, y + (idx * 5));
+        });
+
+        doc.setFont('helvetica', 'normal');
+        doc.text(clean(day.alt), 122, y);
+        
+        descLines.forEach((line, idx) => {
+          doc.text(line, 138, y + (idx * 5));
+        });
+
+        y += rowHeight;
+      });
+
+      // Footer
+      y = Math.max(y + 10, 250);
+      if (y > 270) { doc.addPage(); y = 25; }
+      doc.setDrawColor(22, 101, 52);
+      doc.line(20, y, 190, y);
+      doc.setFontSize(8);
+      doc.setTextColor(150);
+      doc.text(clean('Generated by Project Peak | projectpeak.com | +977 1 4411123'), 20, y + 7);
+
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0];
+      const filename = trek.name ? clean(trek.name).replace(/[^a-zA-Z0-9]/g, '_') : 'Trek';
+      doc.save(`${filename}_Detailed_Itinerary_${dateStr}.pdf`);
+    } catch (err) {
+      console.error("PDF Generation Error: ", err);
+      alert("Error generating PDF: " + err.message);
+    }
   };
 
   return (
-    <section id="itinerary-planner" className="py-24 md:py-32 px-6 md:px-16 w-full bg-gray-50 dark:bg-peakDeep/80 transition-colors">
+    <section id="itinerary-planner" className="py-16 md:py-32 px-4 sm:px-6 md:px-16 w-full bg-gray-50 dark:bg-peakDeep/80 transition-colors">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="font-display font-bold text-3xl md:text-5xl text-peakDeep dark:text-peakWhite mb-4">Plan Your Trek</h2>
@@ -201,7 +298,7 @@ const ItineraryPlanner = () => {
           </div>
         )}
 
-        <div className="bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-3xl p-8 md:p-12">
+        <div className="bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-12 overflow-x-hidden">
 
           {/* Step 1: Difficulty */}
           {!results && !selectedTrek && currentStep === 0 && (
@@ -394,6 +491,9 @@ const ItineraryPlanner = () => {
                 </div>
               </div>
 
+              {/* Elevation Profile */}
+              <ElevationProfile itinerary={selectedTrek.itinerary} />
+
               {/* Day-by-day */}
               <div className="flex flex-col gap-0">
                 {selectedTrek.itinerary.map((day, i) => (
@@ -423,7 +523,7 @@ const ItineraryPlanner = () => {
                 </button>
                 <button onClick={() => {
                   const msg = `Hi! I'd like to book the *${selectedTrek.name}* trek (${selectedTrek.days} days, ${convertPrice(getTotalPrice(selectedTrek))}, ${accommodations.find(a => a.id === answers.accommodation)?.label}). My itinerary is ready!`;
-                  window.open(`https://wa.me/9779801234567?text=${encodeURIComponent(msg)}`, '_blank');
+                  window.open(`https://wa.me/9779801234567?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
                 }} className="flex-1 bg-peakGreen text-white px-6 py-3 rounded-full font-sans text-sm font-bold uppercase tracking-wider hover:bg-peakGreen/90 transition-colors text-center">
                   Book This Trek
                 </button>

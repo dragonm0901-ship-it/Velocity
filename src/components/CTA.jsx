@@ -7,7 +7,7 @@ const CTA = () => {
 
   const handleWhatsApp = () => {
     const message = "Hi! I'd like to plan a trek in Nepal. Can you help me get started?";
-    window.open(`https://wa.me/9779801234567?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://wa.me/9779801234567?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
   };
 
   return (

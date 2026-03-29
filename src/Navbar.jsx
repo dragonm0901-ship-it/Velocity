@@ -29,63 +29,61 @@ const Navbar = ({ onCompassOpen }) => {
   ];
 
   return (
-    <div className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8 flex justify-center pointer-events-none">
-      <nav className="flex items-center justify-between px-4 py-3 md:px-10 md:py-5 rounded-2xl md:rounded-full transition-all duration-300 w-[90%] md:w-full max-w-[1600px] bg-white/70 dark:bg-peakDeep/80 backdrop-blur-xl border border-black/5 dark:border-white/10 text-peakDeep dark:text-peakWhite shadow-lg pointer-events-auto">
+    <div className="fixed top-0 left-0 right-0 z-50 px-4 py-3 w-full">
+      <nav className="flex items-center justify-between px-5 py-3 md:px-6 md:py-4 rounded-2xl md:rounded-full transition-all duration-300 w-full max-w-7xl mx-auto bg-white/70 dark:bg-peakDeep/80 backdrop-blur-xl border border-black/5 dark:border-white/10 text-peakDeep dark:text-peakWhite shadow-lg">
         
-        <a href="#" className="font-display text-sm sm:text-base md:text-2xl font-bold tracking-wider shrink-0 mt-0.5">
+        <a href="#" className="font-display text-xl md:text-2xl font-bold tracking-wider shrink-0">
           PROJECT PEAK
         </a>
         
-        <div className="hidden md:flex gap-8 lg:gap-12 items-center font-sans tracking-wider text-[13px] uppercase font-semibold">
+        <div className="hidden md:flex gap-6 items-center font-sans tracking-wider text-xs uppercase font-semibold">
           {navLinks.map(link => (
             <a key={link.href} href={link.href} className="hover-lift hover:text-peakGreen transition-colors">{link.label}</a>
           ))}
         </div>
         
-        <div className="flex items-center gap-2">
-          {/* Desktop-only utilities */}
-          <div className="hidden md:flex items-center gap-4">
-            <select 
-              className="bg-transparent border border-black/10 dark:border-white/15 rounded-lg px-2 py-1.5 cursor-pointer font-sans text-xs font-semibold uppercase transition-colors text-peakDeep dark:text-peakWhite"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              aria-label="Select currency"
-            >
-              <option value="NPR">🇳🇵 NPR</option>
-              <option value="USD">🇺🇸 USD</option>
-              <option value="EUR">🇪🇺 EUR</option>
-            </select>
+        <div className="flex items-center gap-2 md:gap-3">
+          <select 
+            className="hidden md:block bg-transparent border border-black/10 dark:border-white/15 rounded-lg px-2 py-1 cursor-pointer font-sans text-xs font-semibold uppercase transition-colors text-peakDeep dark:text-peakWhite"
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+            aria-label="Select currency"
+          >
+            <option value="NPR">🇳🇵 NPR</option>
+            <option value="USD">🇺🇸 USD</option>
+            <option value="EUR">🇪🇺 EUR</option>
+          </select>
 
-            <select 
-              className="bg-transparent border border-black/10 dark:border-white/15 rounded-lg px-2 py-1.5 cursor-pointer font-sans text-xs font-semibold uppercase transition-colors text-peakDeep dark:text-peakWhite"
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              aria-label="Select language"
-            >
-              <option value="EN">EN</option>
-              <option value="FR">FR</option>
-              <option value="DE">DE</option>
-              <option value="ZH">中文</option>
-            </select>
+          <select 
+            className="hidden md:block bg-transparent border border-black/10 dark:border-white/15 rounded-lg px-2 py-1 cursor-pointer font-sans text-xs font-semibold uppercase transition-colors text-peakDeep dark:text-peakWhite"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            aria-label="Select language"
+          >
+            <option value="EN">EN</option>
+            <option value="FR">FR</option>
+            <option value="DE">DE</option>
+            <option value="ZH">中文</option>
+          </select>
 
-            <button 
-              onClick={onCompassOpen} 
-              className="p-2.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
-              aria-label="Open compass"
-            >
-              <CompassIcon size={19} />
-            </button>
+          {/* Compass button */}
+          <button 
+            onClick={onCompassOpen} 
+            className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            aria-label="Open compass"
+          >
+            <CompassIcon size={18} />
+          </button>
 
-            <button 
-              onClick={handleThemeToggle} 
-              className="p-2.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
-              aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-            >
-              <div ref={iconRef}>
-                {theme === 'light' ? <Sun size={19} /> : <Cloud size={19} />}
-              </div>
-            </button>
-          </div>
+          <button 
+            onClick={handleThemeToggle} 
+            className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+          >
+            <div ref={iconRef}>
+              {theme === 'light' ? <Sun size={18} /> : <Cloud size={18} />}
+            </div>
+          </button>
 
           <button 
             onClick={() => setMobileOpen(!mobileOpen)} 
@@ -95,14 +93,14 @@ const Navbar = ({ onCompassOpen }) => {
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
 
-          <a href="#destinations" className="hidden md:flex magnetic-btn bg-peakGreen text-white px-7 py-3 ml-2 rounded-full font-sans uppercase tracking-widest text-[13px] font-bold hover:shadow-lg hover:shadow-peakGreen/30 transition-all items-center">
+          <a href="#destinations" className="hidden md:flex magnetic-btn bg-peakGreen text-white px-5 py-2 rounded-full font-sans uppercase tracking-widest text-xs font-bold hover:shadow-lg hover:shadow-peakGreen/30 transition-all items-center">
             <span className="relative z-10">{t('nav.book')}</span>
           </a>
         </div>
       </nav>
 
       {mobileOpen && (
-        <div className="md:hidden fixed top-[72px] left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-white/95 dark:bg-peakDeep/95 backdrop-blur-xl rounded-2xl border border-black/5 dark:border-white/10 shadow-xl p-5 flex flex-col gap-4 z-[49]">
+        <div className="md:hidden mt-2 mx-auto max-w-7xl bg-white/95 dark:bg-peakDeep/95 backdrop-blur-xl rounded-2xl border border-black/5 dark:border-white/10 shadow-xl p-6 flex flex-col gap-4">
           {navLinks.map(link => (
             <a key={link.href} href={link.href}
               className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors"
@@ -110,13 +108,7 @@ const Navbar = ({ onCompassOpen }) => {
           ))}
           <button onClick={() => { onCompassOpen(); setMobileOpen(false); }}
             className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors text-left flex items-center gap-2">
-            <CompassIcon size={20} /> Compass
-          </button>
-          
-          <button onClick={() => { handleThemeToggle(); setMobileOpen(false); }}
-            className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors text-left flex items-center gap-2">
-            {theme === 'light' ? <Sun size={20} /> : <Cloud size={20} />}
-            {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+            <CompassIcon size={18} /> Compass
           </button>
           
           <div className="flex gap-3 pt-2">

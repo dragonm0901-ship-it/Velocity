@@ -31,12 +31,12 @@ const Destinations = () => {
 
   const handleBook = (dest) => {
     const message = `Hi! I'm interested in booking the *${dest.title}* trek (${dest.days} days, ${convertPrice(dest.priceUSD)}). Please share more details.`;
-    window.open(`https://wa.me/9779801234567?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://wa.me/9779801234567?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
     <>
-      <section id="destinations" ref={sectionRef} className="py-24 md:py-32 px-6 md:px-16 w-full bg-peakWhite dark:bg-peakDark transition-colors">
+      <section id="destinations" ref={sectionRef} className="py-24 md:py-32 px-4 sm:px-6 md:px-16 w-full bg-peakWhite dark:bg-peakDark transition-colors">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-6">
             <div>
